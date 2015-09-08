@@ -1,0 +1,15 @@
+dbConfig = {
+  client: 'mysql',
+  connection: {
+    host     : 'localhost',
+    user     : 'your_user_here',
+    password : 'your_password_here',
+    database : 'your_healthdata_db_here',
+    charset  : 'utf8'
+  }
+}
+
+var knex = require('knex')(dbConfig);
+
+module.exports = require('bookshelf')(knex);
+
