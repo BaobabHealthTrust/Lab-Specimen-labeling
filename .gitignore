@@ -3,3 +3,5 @@
 *~
 nbproject
 db/bookshelf.js
+public/touchscreentoolkit/*
+*.log
