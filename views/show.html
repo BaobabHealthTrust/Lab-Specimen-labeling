@@ -1,0 +1,97 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+        <title></title>
+        <script type="text/javascript">
+            tstUsername = "";
+            tstCurrentDate = "2015-Sept-08";
+            var tt_cancel_destination = null;
+            var tt_cancel_destination = ""
+
+            function setInnerHtmlData(id, result, path) {
+                td = document.getElementById(id);
+                td.innerHTML = "<a href =" + path + ">" + result + "</a>"
+            }
+
+            function newResults() {
+
+            }
+
+            function setAttributes() {
+                divBtn = document.getElementById('buttons');
+                divBtn.innerHTML += "<button onclick='newResults();' class='left button navButton' id='newResultsButton'><span>Enter results</span></button>"
+                divBtn.innerHTML += "<button onclick='editViralLoadResults();' class='left button navButton' id='vlResultsButton'><span>Edit Viral Load results</span></button>"
+            }
+
+            function editViralLoadResults() {
+                window.location = "/lab/edit_lab_results/?patient_id=<%= params[:id] %>"
+            }
+        </script>
+
+        <% include header.html %>
+        <style>
+            #lab_results {
+                border-width: 2px 0px 2px 0px;
+                border-style: solid;
+                height: 500px;
+                padding-left: 5px;
+                padding-right: 5px;
+                width: 97%;
+                overflow: auto; 
+            }
+
+            #headdiv {
+                padding-left:10px;
+            }
+
+            a {
+                background-color: grey;
+                border-bottom: 1px outset black;
+                border-style: outset;
+                border-top: 1px outset black;
+                color: white;
+                display: block;
+                padding: 10px 16px 10px 10px;
+                text-align: center;
+                text-decoration: none;
+            }
+
+            td {
+                padding-top: 5px;
+                padding-bottom: 5px;
+                width: 310px;
+            }
+
+            #vlResultsButton{
+                float: left;
+            }
+        </style>
+
+    </head>
+    <body id="mateme" onload="setTimeout('setAttributes();', 100);">  
+        <div id="container">      
+            <div id="content" style = "position : relative; width : 98%; margin-left : -49%;">
+                <div id = 'headdiv'>
+                    <h3>Lab results</h3>
+
+                    <div id="details">
+                        Name: Test Patient
+                        Gender: Female
+                        Age: 52
+                    </div>
+
+                    <div id = "lab_results">
+
+                    </div>
+                    
+                    <div id="footer" class="dark">
+                        <div id="buttons" class="buttons" style="top:0px">
+                            <button class="left button navButton"><span>Edit Results</span></button>
+                        </div>
+                    </div>
+                </div> 
+            </div>
+    </body>
+</html>

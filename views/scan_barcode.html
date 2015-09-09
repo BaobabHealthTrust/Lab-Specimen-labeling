@@ -25,7 +25,7 @@
                 font-family:"Nimbus Sans L","Arial Narrow",sans-serif;
                 font-size:2.2em;
                 padding-left:5px;
-                width:600px;      
+                width:800px;      
             }
 
             #header div {
@@ -33,25 +33,33 @@
                 float:none;
                 clear:both;
             }
+            
+            .barcode_img{
+                width: 140%;
+            }
         </style>
 
     </head>
     <body id="mateme">  
         <div id="container">      
             <div id="content" style = "position : relative; width : 98%; margin-left : -49%;">
-                <div id="header" style="height:160px;margin-top:-5px;padding-left:20px;">
-                    <h1>Scan Patient</h1><br/><br/><br/><br/><br/><br/>
-                    <form id='barcodeForm' action="#">
-                        <div style="float:left">Scan Bar-code:</div>
-                        <input type='text' id='barcode' class='touchscreenTextInput' name='identifier' style='position:absolute'/>
-                        <input type='submit' value='submit' name='submit' style='display:none'/>
+                <div id="header" style="float: center">
+                    <form id='barcodeForm' action="#">    
+                        <table style="padding-top: 20px; padding-left: 2%;">
+                            <tr>
+                                <td><img src='/images/barcode.jpg' class="barcode_img"></img></td>
+                                <td style="padding-left:38px; padding-bottom: 50px;"><input type='text' id='barcode' class='touchscreenTextInput' name='identifier' style='position:absolute'/></td>
+                            </tr>
+                        </table>
+
+                        <input type='submit' value='submit' name='commit' style='display:none'/>
                     </form>
                 </div>
                 <div/>
 
                 <div id="footer" class="dark">
                     <div id="buttons" class="buttons" style="top:0px">
-                        <button id="cancel" class="red left"><span>Cancel</span></button>
+                        <button id="cancel" class="red left"><span>Logout</span></button>
                     </div>
                 </div>
             </div> 
