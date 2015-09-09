@@ -22,12 +22,9 @@
             function setAttributes() {
                 divBtn = document.getElementById('buttons');
                 divBtn.innerHTML += "<button onclick='newResults();' class='left button navButton' id='newResultsButton'><span>Enter results</span></button>"
-                divBtn.innerHTML += "<button onclick='editViralLoadResults();' class='left button navButton' id='vlResultsButton'><span>Edit Viral Load results</span></button>"
+                divBtn.innerHTML += "<button class='left button navButton' id='vlResultsButton'><span>Edit Lab results</span></button>"
             }
 
-            function editViralLoadResults() {
-                window.location = "/lab/edit_lab_results/?patient_id=<%= params[:id] %>"
-            }
         </script>
 
         <% include header.html %>
@@ -40,6 +37,7 @@
                 padding-right: 5px;
                 width: 97%;
                 overflow: auto; 
+                margin-top: 30px;
             }
 
             #headdiv {
@@ -67,31 +65,52 @@
             #vlResultsButton{
                 float: left;
             }
+
+            #details {
+                -moz-user-select: none;
+                background-color: #fff;
+                border: 1px solid #999;
+                border-radius: 20px;
+                display: table;
+                float: left;
+                margin: 5px;
+                overflow: hidden;
+                padding: 10px;
+                width: 30%;
+            }
+
+            .label{
+                font-size: 1em;
+                font-weight: bold;
+                margin: 0 5px 5px;
+                padding: 2px;
+            }
         </style>
 
     </head>
-    <body id="mateme" onload="setTimeout('setAttributes();', 100);">  
-        <div id="container">      
-            <div id="content" style = "position : relative; width : 98%; margin-left : -49%;">
+    <body id="mateme" onload="setTimeout('setAttributes();', 100);">
+        <div id="container">
+            <div id="content">
                 <div id = 'headdiv'>
-                    <h3>Lab results</h3>
-
                     <div id="details">
-                        Name: Test Patient
-                        Gender: Female
-                        Age: 52
+                        <span class="label" style="padding-right:80px">Name</span>: Test Patient<br />
+                        <span class="label" style="padding-right:42px">Residence</span>: Area 23<br />
+                        <span class="label" style="padding-right:92px">Age</span>: 28
                     </div>
+                </div>
 
-                    <div id = "lab_results">
+                <div id = "lab_results">
 
+                </div>
+                <div id="footer">
+                    <div id="buttons" class="buttonsDiv" style="width: 100%;">
+                        <button id="finishButton" class="button navButton green" onclick="if (tt_cancel_destination)
+                                    window.location = tt_cancel_destination;"><span>Finish</span></button>
                     </div>
-                    
-                    <div id="footer" class="dark">
-                        <div id="buttons" class="buttons" style="top:0px">
-                            <button class="left button navButton"><span>Edit Results</span></button>
-                        </div>
-                    </div>
-                </div> 
+                    <div id="tt_extraButtons"/>
+                </div>
+
             </div>
+        </div>
     </body>
 </html>

@@ -28,6 +28,7 @@ app.use('/users', users);
 app.use('/users/login', users);
 app.use('/patients', patients);
 app.use('/patients/scan_barcode', patients);
+app.use('/patients/show', patients);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
