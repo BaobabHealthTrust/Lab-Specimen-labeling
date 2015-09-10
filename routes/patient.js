@@ -10,7 +10,7 @@ router.get('/scan_barcode', function(req, res, next) {
   res.render('scan_barcode', { title: 'Scan Barcode' });
 });
 
-router.get('/show', function(req, res, next) {
+router.get('/show/:id', function(req, res, next) {
   res.render('show', { title: 'Patients Home Page' });
 });
 module.exports = router;

@@ -26,6 +26,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', routes);
 app.use('/users', users);
 app.use('/users/login', users);
+app.use('/users/process_authentication', patients);
 app.use('/patients', patients);
 app.use('/patients/scan_barcode', patients);
 app.use('/patients/show', patients);
