@@ -8,7 +8,9 @@ router.get('/', function (req, res, next) {
 });
 
 router.get('/login', function (req, res, next) {
-    res.render('login', {title: 'Login page'});
+    authentication_status = req.session.authenticated
+    req.session.authenticated = null;
+    res.render('login', {title: 'Login page', authenticated:authentication_status});
 });
 
 router.post('/process_authentication', function (request, response) {
@@ -22,15 +24,14 @@ router.post('/process_authentication', function (request, response) {
     client.post("http://localhost:3001/single_sign_on/get_token", args, function (data, res) {
         var resp = JSON.parse(data);
         var authToken = resp.auth_token;
-        if (authToken.length > 0){
+        if (authToken.length > 0) {
             //User is authenticated
             //Need to create some sessions here
-            console.log('User is successfully authenticated')
             response.redirect('/patients/scan_barcode');
         }
-        else{
+        else {
             //User is not authenticated
-            console.log('User Authentication not successful')
+            request.session.authenticated = false
             response.redirect('/users/login');
         }
         //console.log(response);
