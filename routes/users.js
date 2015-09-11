@@ -10,7 +10,7 @@ router.get('/', function (req, res, next) {
 router.get('/login', function (req, res, next) {
     authentication_status = req.session.authenticated
     req.session.authenticated = null;
-    res.render('login', {title: 'Login page', authenticated:authentication_status});
+    res.render('login', {title: 'Login page', authenticated: authentication_status});
 });
 
 router.post('/process_authentication', function (request, response) {
@@ -35,7 +35,11 @@ router.post('/process_authentication', function (request, response) {
             response.redirect('/users/login');
         }
         //console.log(response);
+    }).on('error', function (err) {
+        //URL not found
+        console.log('something went wrong on the request', err.request.options);
     });
+    ;
     //console.log('Username = ' + username + '&password=' + password);
 
 });
