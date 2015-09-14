@@ -1,7 +1,11 @@
 var express = require('express');
 var router = express.Router();
 var Client = require('node-rest-client').Client;
+var bartConfig = require('../bart_config');
+var bartHost = bartConfig.host;
+var bartPort = bartConfig.port;
 client = new Client();
+var bartAddress = "http://" + bartHost + ':' + bartPort + "/single_sign_on/get_token"
 
 router.get('/', function (req, res, next) {
     res.send('respond with a resource');
@@ -23,7 +27,7 @@ router.post('/process_authentication', function (request, response) {
         data: {login: username, password: password},
         headers: {"Content-Type": "application/json"}
     };
-    client.post("http://localhost:3001/single_sign_on/get_token", args, function (data, res) {
+    client.post(bartAddress, args, function (data, res) {
         var resp = JSON.parse(data);
         var authToken = resp.auth_token;
         if (authToken.length > 0) {
