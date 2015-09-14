@@ -30,6 +30,7 @@ app.use(session({
 app.use('/', routes);
 app.use('/users', users);
 app.use('/users/login', users);
+app.use('/users/logout', users);
 app.use('/users/process_authentication', patients);
 app.use('/patients', patients);
 app.use('/patients/scan_barcode', patients);

@@ -12,11 +12,19 @@ router.get('/', function (req, res, next) {
 });
 
 router.get('/login', function (req, res, next) {
-    authentication_status = req.session.authenticated
-    bart_error = req.session.bart_error
+    authentication_status = req.session.authenticated;
+    bart_error = req.session.bart_error;
+    logged_out = req.session.logged_out;
     req.session.authenticated = null;
     req.session.bart_error = null;
+    req.session.logged_out = null;
     res.render('login', {title: 'Login page', authenticated: authentication_status});
+});
+
+router.get('/logout', function (req, res, next) {
+    req.session.logged_out = 'true';
+    req.session.session_user_id = null;
+    res.redirect('/users/login');
 });
 
 router.post('/process_authentication', function (request, response) {
