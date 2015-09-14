@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var Client = require('node-rest-client').Client;
+var loadUser = require('../force_login');
 var bartConfig = require('../bart_config');
 var bartHost = bartConfig.host;
 var bartPort = bartConfig.port;
@@ -15,9 +16,10 @@ router.get('/login', function (req, res, next) {
     authentication_status = req.session.authenticated;
     bart_error = req.session.bart_error;
     logged_out = req.session.logged_out;
-    req.session.authenticated = null;
-    req.session.bart_error = null;
-    req.session.logged_out = null;
+    req.session.destroy();
+    //req.session.authenticated = null;
+    //req.session.bart_error = null;
+    //req.session.logged_out = null;
     res.render('login', {title: 'Login page', authenticated: authentication_status});
 });
 
@@ -41,6 +43,7 @@ router.post('/process_authentication', function (request, response) {
         if (authToken.length > 0) {
             //User is authenticated
             //Need to create some sessions here
+            request.session.session_user_id = Math.floor((Math.random() * 100) + 1); //Return a random number between 1 and 100:
             response.redirect('/patients/scan_barcode');
         }
         else {
@@ -58,4 +61,5 @@ router.post('/process_authentication', function (request, response) {
     //console.log('Username = ' + username + '&password=' + password);
 
 });
+
 module.exports = router;

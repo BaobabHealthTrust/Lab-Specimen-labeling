@@ -27,6 +27,7 @@ app.use(session({
     resave: false,
     saveUninitialized: true
 }))
+
 app.use('/', routes);
 app.use('/users', users);
 app.use('/users/login', users);
@@ -34,7 +35,7 @@ app.use('/users/logout', users);
 app.use('/users/process_authentication', patients);
 app.use('/patients', patients);
 app.use('/patients/scan_barcode', patients);
-app.use('/patients/show', patients);
+app.use('/patients/show/:identifier?', patients);
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
     var err = new Error('Not Found');
