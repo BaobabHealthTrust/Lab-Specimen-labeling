@@ -9,7 +9,9 @@ router.get('/', function (req, res, next) {
 
 router.get('/login', function (req, res, next) {
     authentication_status = req.session.authenticated
+    bart_error = req.session.bart_error
     req.session.authenticated = null;
+    req.session.bart_error = null;
     res.render('login', {title: 'Login page', authenticated: authentication_status});
 });
 
@@ -37,7 +39,8 @@ router.post('/process_authentication', function (request, response) {
         //console.log(response);
     }).on('error', function (err) {
         //URL not found
-        console.log('something went wrong on the request', err.request.options);
+        request.session.bart_error = 'true';
+        response.redirect('/users/login');
     });
     ;
     //console.log('Username = ' + username + '&password=' + password);

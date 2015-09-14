@@ -12,6 +12,9 @@
             <% if (authenticated == false) { %>
                     showMessage("Wrong username/password combination")         
             <% } %>
+            <% if (bart_error == 'true') { %>
+                    showMessage("Unable to connect to BART2. Configure BART2 to run first")         
+            <% } %>
         }
 
 window.setTimeout("informUser();", 350);
