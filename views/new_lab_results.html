@@ -1,7 +1,7 @@
 
 <script>
-    var tt_cancel_destination = ""
-
+    var tt_cancel_destination = "/patients/show?identifier=<%= patientIdentifier %>"
+    var tstCurrentDate = "<%= today %>"
     function updateResultKeyPad() {
         curr_page = tstCurrentPage - 1
         buttons = document.getElementsByClassName("keyboardButton");
@@ -47,6 +47,12 @@
             }
         }
     }
+
+    function changeTodayButtonClassName() {
+        today = document.getElementById('today');
+        today.className = 'blue';
+    }
+
 </script>
 <style>
 
@@ -66,8 +72,21 @@
     <div id="container">
         <div id="content">
             <form id='' action="#" method='post'>
-
-
+                <select helpText="Test date available" id="test_date_available" name="date_available" onchange = "displayDate()">
+                    <option value=""></option>
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                </select>
+                <input tt_onLoad="changeTodayButtonClassName();" condition="$('test_date_available').value.toLowerCase() == 'yes'" 
+                       field_type="date" helpText="Test date" id="test_date_id" max="<%= today %>" name="test_date" 
+                       tt_pageStyleClass="Date DatesOnly" type="text" value="<%= today %>" 
+                       />
+                <input field_type="number" helpText="Test results" id="test_value_" name="test_value[]" 
+                       size="8" tt_onLoad="updateResultKeyPad();" type="text" 
+                       validationMessage="You must specify >, < or =" validationRule="^(>|<|=|U|M)([\d.]+|nknown|issing)$" 
+                       />
+                
+                <input id="patient_identifier" name="patient_identifier" type="hidden" value="<%= patientIdentifier %>" />
             </form>
             <!--<div id="footer">
             </div>-->

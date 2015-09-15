@@ -30,14 +30,14 @@ router.get('/show/:identifier?', /*loadUser,*/ function (req, res, next) {
         data: data,
         headers: {"Content-Type": "application/json"}
     };
-    
+
     client.post(bartAddress, args, function (data, resp) {
         var person = JSON.parse(data);
         if (isEmpty(person) === true) {
             req.session.patient_not_found = 'true'
-            res.redirect("/patients/scan_barcode");            
+            res.redirect("/patients/scan_barcode");
         }
-        
+
         else {
             personAddress = person["person"]["addresses"];
             personAttributes = person["person"]["attributes"];
@@ -47,21 +47,23 @@ router.get('/show/:identifier?', /*loadUser,*/ function (req, res, next) {
             birthDay = person["person"]["birth_day"];
             birthMonth = person["person"]["birth_month"];
             birthYear = person["person"]["birth_year"];
-            if (birthDay === 'Unknown') birthDay = 1;
-            if (birthMonth === 'Unknown') birthMonth = 7;
-            
+            if (birthDay === 'Unknown')
+                birthDay = 1;
+            if (birthMonth === 'Unknown')
+                birthMonth = 7;
+
             birthdate = new Date(parseInt(birthYear), parseInt(birthMonth) - 1, parseInt(birthDay));
             age = getAge(birthdate);
 
             res.render('show', {title: 'Patients Home Page', personAddress: personAddress,
-            personAttributes: personAttributes, personNames: personNames,
-            patientIdentifiers: patientIdentifiers, gender: gender, birthDay: birthDay,
-            birthMonth: birthMonth, birthYear: birthYear, age:age
-        });
+                personAttributes: personAttributes, personNames: personNames,
+                patientIdentifiers: patientIdentifiers, gender: gender, birthDay: birthDay,
+                birthMonth: birthMonth, birthYear: birthYear, age: age
+            });
         }
     }).on('error', function (err) {
         console.log('Error')
-        res.redirect("/patients/scan_barcode");      
+        res.redirect("/patients/scan_barcode");
         //URL not found
         //response.redirect('/users/login');
     });
@@ -69,7 +71,16 @@ router.get('/show/:identifier?', /*loadUser,*/ function (req, res, next) {
 });
 
 router.get('/new_lab_results/:identifier', /*loadUser,*/ function (req, res, next) {
-    res.render('new_lab_results', {title: 'New Lab Results'});
+    //monthNames = ['', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    today = new Date();
+    thisMonth = today.getMonth()
+    if (thisMonth < 10) {
+        thisMonth = '0' + thisMonth;
+    }
+    formattedDate = today.getFullYear() + '-' + thisMonth + '-' + +today.getDate();
+    patientIdentifier = req.params.identifier;
+    res.render('new_lab_results', {title: 'New Lab Results', today: formattedDate,
+        patientIdentifier: patientIdentifier});
 });
 
 function isEmpty(obj) {
