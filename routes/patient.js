@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var model = require('../models/healthData');
 var loadUser = require('../force_login');
 var Client = require('node-rest-client').Client;
 client = new Client();
@@ -79,8 +80,26 @@ router.get('/new_lab_results/:identifier', /*loadUser,*/ function (req, res, nex
     }
     formattedDate = today.getFullYear() + '-' + thisMonth + '-' + +today.getDate();
     patientIdentifier = req.params.identifier;
-    res.render('new_lab_results', {title: 'New Lab Results', today: formattedDate,
-        patientIdentifier: patientIdentifier});
+    LabTestType = model.LabTestType;
+    results = ''
+    new LabTestType().fetchAll().then(function (models) {
+        labTests = models.toJSON();
+        labTestsProcessed = [];
+        for (var i=0; i<= labTests.length - 1; i++){
+            value = labTests[i].TestName;
+            key = value.replace(/_/g, " ");
+            labTestsProcessed.push([key, value]);
+        }
+        console.log(labTestsProcessed)
+        res.render('new_lab_results', {title: 'New Lab Results', today: formattedDate,
+            patientIdentifier: patientIdentifier, labTests: JSON.stringify(labTestsProcessed)});
+    })
+    //console.log(model.LabParameter)
+    /*new Lab({rec_id: 26})
+     .fetch()
+     .then(function (model) {
+     console.log(model);
+     });*/
 });
 
 function isEmpty(obj) {

@@ -8,7 +8,7 @@ var session = require('express-session');
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var patients = require('./routes/patient');
-var bookshelf = require('./db/bookshelf');
+/*var bookshelf = require('./db/bookshelf');*/
 var app = express();
 
 // view engine setup
@@ -68,7 +68,7 @@ app.use(function (err, req, res, next) {
     });
 });
 
-var LabParameter = bookshelf.Model.extend({
+/*var LabParameter = bookshelf.Model.extend({
     tableName: 'Lab_Parameter',
     idAttribute: 'ID',
     lab_samples: function () {
@@ -96,7 +96,7 @@ var LabTestType = bookshelf.Model.extend({
 
 var Lab = bookshelf.Model.extend({
     tableName: 'map_lab_panel'
-});
+});*/
 
 /*new Lab({rec_id: 26})
  .fetch()

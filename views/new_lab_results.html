@@ -1,9 +1,11 @@
 
 <script>
     var tt_cancel_destination = "/patients/show?identifier=<%= patientIdentifier %>"
-    var tstCurrentDate = "<%= today %>"
+    var tstCurrentDate = "<%= today %>";
+    var labTests = JSON.parse('<%- labTests %>');
+    
     function updateResultKeyPad() {
-        curr_page = tstCurrentPage - 1
+        curr_page = tstCurrentPage - 1;
         buttons = document.getElementsByClassName("keyboardButton");
         $("clearButton").setAttribute("onmousedown", "clearInput();updateResultKeyPad();");
         $("backButton").setAttribute("onmousedown", ";gotoPage(" + curr_page + ", null, true);resetPad();");
@@ -53,6 +55,9 @@
         today.className = 'blue';
     }
 
+    function addOptions(){
+        
+    }
 </script>
 <style>
 
