@@ -16,7 +16,7 @@
             }
 
             function newResults() {
-
+                window.location = "/patients/new_lab_results/<%= patientIdentifiers['National id']%>";
             }
 
             function setAttributes() {
@@ -108,7 +108,7 @@
             <div id="content">
                 <div id = 'headdiv'>
                     <div id="details">
-                        <span class="identifier"><%= patientIdentifiers["National id"]%></span><br/>
+                        <span class="identifier"><%= patientIdentifiers["National id"] %></span><br/>
                         <hr></hr>
                             <span class="label" style="padding-right:80px">Name</span>: <%= personNames["given_name"] + ' ' + personNames["family_name"]%> (<%= gender %>)<br />
                             <span class="label" style="padding-right:42px">Residence</span>: <%= personAddress["city_village"] %><br />

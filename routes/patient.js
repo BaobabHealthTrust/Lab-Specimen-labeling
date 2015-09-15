@@ -68,6 +68,10 @@ router.get('/show/:identifier?', /*loadUser,*/ function (req, res, next) {
 
 });
 
+router.get('/new_lab_results/:identifier', /*loadUser,*/ function (req, res, next) {
+    res.render('new_lab_results', {title: 'New Lab Results'});
+});
+
 function isEmpty(obj) {
     return Object.keys(obj).length === 0;
 }

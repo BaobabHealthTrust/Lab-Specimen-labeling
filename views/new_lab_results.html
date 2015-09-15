@@ -1,0 +1,77 @@
+
+<script>
+    var tt_cancel_destination = ""
+
+    function updateResultKeyPad() {
+        curr_page = tstCurrentPage - 1
+        buttons = document.getElementsByClassName("keyboardButton");
+        $("clearButton").setAttribute("onmousedown", "clearInput();updateResultKeyPad();");
+        $("backButton").setAttribute("onmousedown", ";gotoPage(" + curr_page + ", null, true);resetPad();");
+        //$("nextButton").setAttribute("onmousedown","gotoNextPage();resetPad();");   
+
+        for (i = 0; i < buttons.length; i++) {
+            if (buttons[i].id == "equals" || buttons[i].id == "greaterthan" || buttons[i].id == "lessthan") {
+                buttons[i].disabled = false;
+                if (buttons[i].id == "equals") {
+                    buttons[i].setAttribute("onmousedown", "press('=');resetKeyPad();");
+                } else if (buttons[i].id == "lessthan") {
+                    buttons[i].setAttribute("onmousedown", "press('<');resetKeyPad();");
+                } else if (buttons[i].id == "greaterthan") {
+                    buttons[i].setAttribute("onmousedown", "press('>');resetKeyPad();");
+                }
+            } else {
+                buttons[i].disabled = true;
+            }
+        }
+    }
+
+
+    function resetPad() {
+        curr_page = tstCurrentPage - 1
+        buttons = document.getElementsByClassName("keyboardButton");
+        for (i = 0; i < buttons.length; i++) {
+            buttons[i].disabled = false;
+        }
+        $("clearButton").setAttribute("onmousedown", "clearInput();");
+        $("backButton").setAttribute("onmousedown", ";gotoPage(" + curr_page + ", null, true);");
+        $("nextButton").setAttribute("onmousedown", "gotoNextPage();");
+    }
+
+    function resetKeyPad() {
+        buttons = document.getElementsByClassName("keyboardButton");
+        for (i = 0; i < buttons.length; i++) {
+            if (buttons[i].id == "equals" || buttons[i].id == "greaterthan" || buttons[i].id == "lessthan") {
+                buttons[i].disabled = true;
+            } else {
+                buttons[i].disabled = false;
+            }
+        }
+    }
+</script>
+<style>
+
+    #lessthan , #greaterthan , #equals, #decimal {
+        display: inline !important;
+    }
+
+    .tt_controls_test_result #date,#minus,#abc,#comma,#qwerty,
+    #slash,#percent,#star,#plus,#date,#Unknown,#char,#backspace {     
+        display:none;                                                               
+    }
+
+    .tt_controls_test_date #Unknown { display: none; }
+</style>
+<% include header.html %>
+<body id="mateme">
+    <div id="container">
+        <div id="content">
+            <form id='' action="#" method='post'>
+
+
+            </form>
+            <!--<div id="footer">
+            </div>-->
+        </div>
+    </div>
+</body>
+
