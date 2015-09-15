@@ -20,7 +20,7 @@ router.get('/scan_barcode', /*loadUser,*/ function (req, res, next) {
     req.session.patient_not_found = null;
     res.render('scan_barcode', {title: 'Scan Barcode', patient_not_found: patient_not_found});
 });
-var emptyObject = 'hhh';
+
 router.get('/show/:identifier?', /*loadUser,*/ function (req, res, next) {
     patientIdentifier = req.query.identifier;
 
@@ -47,11 +47,16 @@ router.get('/show/:identifier?', /*loadUser,*/ function (req, res, next) {
             birthDay = person["person"]["birth_day"];
             birthMonth = person["person"]["birth_month"];
             birthYear = person["person"]["birth_year"];
+            if (birthDay === 'Unknown') birthDay = 1;
+            if (birthMonth === 'Unknown') birthMonth = 7;
             
+            birthdate = new Date(parseInt(birthYear), parseInt(birthMonth) - 1, parseInt(birthDay));
+            age = getAge(birthdate);
+
             res.render('show', {title: 'Patients Home Page', personAddress: personAddress,
             personAttributes: personAttributes, personNames: personNames,
             patientIdentifiers: patientIdentifiers, gender: gender, birthDay: birthDay,
-            birthMonth: birthMonth, birthYear: birthYear
+            birthMonth: birthMonth, birthYear: birthYear, age:age
         });
         }
     }).on('error', function (err) {
@@ -66,4 +71,16 @@ router.get('/show/:identifier?', /*loadUser,*/ function (req, res, next) {
 function isEmpty(obj) {
     return Object.keys(obj).length === 0;
 }
+
+function getAge(dateString) {
+    var today = new Date();
+    var birthDate = new Date(dateString);
+    var age = today.getFullYear() - birthDate.getFullYear();
+    var m = today.getMonth() - birthDate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+    }
+    return age;
+}
+
 module.exports = router;
