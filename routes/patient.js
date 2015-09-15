@@ -14,7 +14,8 @@ router.get('/', function (req, res, next) {
 });
 
 router.get('/scan_barcode', /*loadUser,*/ function (req, res, next) {
-    patient_not_found = req.session.patient_not_found;
+    console.log('Not found = ' + req.session.patient_not_found);
+    //patient_not_found = req.session.patient_not_found;
     patient_not_found = req.session.patient_not_found;
     req.session.patient_not_found = null;
     res.render('scan_barcode', {title: 'Scan Barcode', patient_not_found: patient_not_found});
@@ -31,9 +32,9 @@ router.get('/show/:identifier?', /*loadUser,*/ function (req, res, next) {
     };
     
     client.post(bartAddress, args, function (data, resp) {
-        emptyObject = 'k'
         var person = JSON.parse(data);
         if (isEmpty(person) === true) {
+            req.session.patient_not_found = 'true'
             res.redirect("/patients/scan_barcode");            
         }
         
@@ -55,6 +56,7 @@ router.get('/show/:identifier?', /*loadUser,*/ function (req, res, next) {
         }
     }).on('error', function (err) {
         console.log('Error')
+        res.redirect("/patients/scan_barcode");      
         //URL not found
         //response.redirect('/users/login');
     });
