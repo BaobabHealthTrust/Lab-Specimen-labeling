@@ -77,6 +77,9 @@
     <div id="container">
         <div id="content">
             <form id='' action="#" method='post'>
+                <select helpText="Available tests" id="value" name="lab_result">
+                    <%- optionsForSelect %>
+                </select>
                 <select helpText="Test date available" id="test_date_available" name="date_available" onchange = "displayDate()">
                     <option value=""></option>
                     <option value="Yes">Yes</option>

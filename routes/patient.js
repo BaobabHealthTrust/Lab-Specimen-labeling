@@ -81,18 +81,35 @@ router.get('/new_lab_results/:identifier', /*loadUser,*/ function (req, res, nex
     formattedDate = today.getFullYear() + '-' + thisMonth + '-' + +today.getDate();
     patientIdentifier = req.params.identifier;
     LabTestType = model.LabTestType;
-    results = ''
+
+    optionsForSelect = '<option value=""></option>\n';
     new LabTestType().fetchAll().then(function (models) {
         labTests = models.toJSON();
         labTestsProcessed = [];
-        for (var i=0; i<= labTests.length - 1; i++){
+        for (var i = 0; i <= labTests.length - 1; i++) {
             value = labTests[i].TestName;
             key = value.replace(/_/g, " ");
             labTestsProcessed.push([key, value]);
         }
-        console.log(labTestsProcessed)
+
+        labTestsProcessed.sort(function (a, b) {
+            var valueA = a[0].toLowerCase(), valueB = b[0].toLowerCase();
+            if (valueA < valueB) //sort string ascending
+                return -1;
+            if (valueA > valueB)
+                return 1;
+            return 0 //default return value (no sorting)
+        });
+        
+        for (var i = 0; i <= labTestsProcessed.length - 1; i++) {
+            key = labTestsProcessed[i][0];
+            value = labTestsProcessed[i][1];
+            optionsForSelect += '<option value="' + value + '">' + key + '</option>\n';
+        }
+        
         res.render('new_lab_results', {title: 'New Lab Results', today: formattedDate,
-            patientIdentifier: patientIdentifier, labTests: JSON.stringify(labTestsProcessed)});
+            patientIdentifier: patientIdentifier, labTests: JSON.stringify(labTestsProcessed),
+            optionsForSelect: optionsForSelect});
     })
     //console.log(model.LabParameter)
     /*new Lab({rec_id: 26})
