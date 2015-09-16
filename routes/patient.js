@@ -120,16 +120,49 @@ router.get('/new_lab_results/:identifier', /*loadUser,*/ function (req, res, nex
 });
 
 router.post('/process_lab_results', function (request, response) {
+    console.log(request.body)
     var labResult = request.body.lab_result;
     var testDate = request.body.test_date;
-    var testValue =request.body.test_value;
+    var testValue = request.body.test_value;
     var patientIdentifier = request.body.patient_identifier;
-    
+    var test_modifier = labResult.match(/=|<|>/)[0];
+    var test_value = labResult.replace(/>/g, '').replace(/</g, '').replace(/=/g, '');
+
+
     LabTestType = model.LabTestType;
     LabTestTable = model.LabTestTable;
-    LabPanel = model.LabPanel;//Need to be added
+    LabPanel = model.LabPanel;
     LabSample = model.LabSample;
     LabParameter = model.LabParameter;
+
+    new LabTestTable({
+        TestOrdered: '#',
+        Pat_ID: '#',
+        OrderTime: '#',
+        OrderedBy: '#',
+        Location: '#'
+    }).save().then(function (lab_test_table) {
+        new LabSample({
+            AccessionNum: '#',
+            USERID: '#',
+            TESTDATE: '#',
+            PATIENTID: '#',
+            DATE: '#',
+            TIME: '#',
+            SOURCE: '#',
+            DeleteYN: '#',
+            Attribute: '#',
+            TimeStamp: '#'
+        }).save().then(function (lab_sample) {
+            new LabParameter({
+                Sample_ID: '#',
+                TESTTYPE: '#',
+                TESTVALUE: '#',
+                TimeStamp: '#',
+                Range: '#'
+            }).save()
+        })
+    });
 })
 
 function isEmpty(obj) {
