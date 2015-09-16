@@ -100,13 +100,13 @@ router.get('/new_lab_results/:identifier', /*loadUser,*/ function (req, res, nex
                 return 1;
             return 0 //default return value (no sorting)
         });
-        
+
         for (var i = 0; i <= labTestsProcessed.length - 1; i++) {
             key = labTestsProcessed[i][0];
             value = labTestsProcessed[i][1];
             optionsForSelect += '<option value="' + value + '">' + key + '</option>\n';
         }
-        
+
         res.render('new_lab_results', {title: 'New Lab Results', today: formattedDate,
             patientIdentifier: patientIdentifier, labTests: JSON.stringify(labTestsProcessed),
             optionsForSelect: optionsForSelect});
@@ -118,6 +118,19 @@ router.get('/new_lab_results/:identifier', /*loadUser,*/ function (req, res, nex
      console.log(model);
      });*/
 });
+
+router.post('/process_lab_results', function (request, response) {
+    var labResult = request.body.lab_result;
+    var testDate = request.body.test_date;
+    var testValue =request.body.test_value;
+    var patientIdentifier = request.body.patient_identifier;
+    
+    LabTestType = model.LabTestType;
+    LabTestTable = model.LabTestTable;
+    LabPanel = model.LabPanel;//Need to be added
+    LabSample = model.LabSample;
+    LabParameter = model.LabParameter;
+})
 
 function isEmpty(obj) {
     return Object.keys(obj).length === 0;

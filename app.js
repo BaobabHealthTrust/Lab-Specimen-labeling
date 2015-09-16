@@ -37,6 +37,7 @@ app.use('/patients', patients);
 app.use('/patients/scan_barcode', patients);
 app.use('/patients/show/:identifier?', patients);
 app.use('/patients/new_lab_results/:identifier', patients);
+app.use('/patients/process_lab_results', patients);
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
     var err = new Error('Not Found');
