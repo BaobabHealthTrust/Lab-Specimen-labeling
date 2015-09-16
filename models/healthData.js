@@ -17,8 +17,9 @@ var LabSample = bookshelf.Model.extend({
 });
 
 var LabTestTable = bookshelf.Model.extend({
-    tableName: 'LabTestTable',
-    idAttribute: ['AccessionNum', 'TestOrdered']
+    tableName: 'LabTestTable',//,
+    //idAttribute: ['AccessionNum', 'TestOrdered'],
+    idAttribute: 'AccessionNum'
 });
 
 var LabTestType = bookshelf.Model.extend({

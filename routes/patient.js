@@ -120,15 +120,15 @@ router.get('/new_lab_results/:identifier', /*loadUser,*/ function (req, res, nex
 });
 
 router.post('/process_lab_results', function (request, response) {
-    console.log(request.body)
     var labResult = request.body.lab_result;
     var testDate = request.body.test_date;
     var testValue = request.body.test_value;
     var patientIdentifier = request.body.patient_identifier;
-    var test_modifier = labResult.match(/=|<|>/)[0];
-    var test_value = labResult.replace(/>/g, '').replace(/</g, '').replace(/=/g, '');
+    var testModifier = testValue.match(/=|<|>/)[0];
+    var testValue = testValue.replace(/>/g, '').replace(/</g, '').replace(/=/g, '');
 
-
+    today = new Date();
+    orderTime = today.getHours() + ':' + today.getMinutes() + ':' + today.getSeconds();
     LabTestType = model.LabTestType;
     LabTestTable = model.LabTestTable;
     LabPanel = model.LabPanel;
@@ -137,31 +137,40 @@ router.post('/process_lab_results', function (request, response) {
 
     new LabTestTable({
         TestOrdered: '#',
-        Pat_ID: '#',
-        OrderTime: '#',
+        Pat_ID: patientIdentifier,
+        OrderDate: testDate,
+        OrderTime: orderTime,
         OrderedBy: '#',
         Location: '#'
     }).save().then(function (lab_test_table) {
+        console.log('Lab Test Table Saved')
+        console.log(lab_test_table)
+        console.log(JSON.stringify(lab_test_table))
         new LabSample({
-            AccessionNum: '#',
+            AccessionNum: lab_test_table.get('AccessionNum'),
             USERID: '#',
-            TESTDATE: '#',
-            PATIENTID: '#',
-            DATE: '#',
-            TIME: '#',
+            TESTDATE: testDate,
+            PATIENTID: patientIdentifier,
+            DATE: testDate,
+            TIME: orderTime,
             SOURCE: '#',
-            DeleteYN: '#',
-            Attribute: '#',
-            TimeStamp: '#'
+            DeleteYN: 0,
+            Attribute: 'pass',
+            TimeStamp: new Date()
         }).save().then(function (lab_sample) {
+            console.log('Lab Sample Saved');
+            console.log(lab_sample);
             new LabParameter({
-                Sample_ID: '#',
+                Sample_ID: lab_sample.get('Sample_ID'),//lab_sample.Sample_ID,
                 TESTTYPE: '#',
-                TESTVALUE: '#',
-                TimeStamp: '#',
-                Range: '#'
-            }).save()
-        })
+                TESTVALUE: testValue,
+                TimeStamp: new Date(),
+                Range: testModifier
+            }).save().then(function (lab_parameter) {
+                console.log('Lab Parameter also saved');
+                console.log(lab_parameter);
+            });
+        });
     });
 })
 
