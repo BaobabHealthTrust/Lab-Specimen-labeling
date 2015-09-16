@@ -74,11 +74,11 @@ router.get('/show/:identifier?', /*loadUser,*/ function (req, res, next) {
 router.get('/new_lab_results/:identifier', /*loadUser,*/ function (req, res, next) {
     //monthNames = ['', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
     today = new Date();
-    thisMonth = today.getMonth()
+    thisMonth = today.getMonth() + 1;
     if (thisMonth < 10) {
         thisMonth = '0' + thisMonth;
     }
-    formattedDate = today.getFullYear() + '-' + thisMonth + '-' + +today.getDate();
+    formattedDate = today.getFullYear() + '-' + thisMonth + '-' + today.getDate();
     patientIdentifier = req.params.identifier;
     LabTestType = model.LabTestType;
 
