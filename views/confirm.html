@@ -1,0 +1,226 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+        <title></title>
+        <script type="text/javascript">
+            var tstUsername = "";
+            var tstCurrentDate = "2015-Sept-08";
+            var tt_cancel_destination = null;
+            var tstMessageBar;
+            var tstTimerHandle = null;
+            var tstTimerFunctionCall = "";
+
+            function correctPatient() {
+
+            }
+
+            function WrongPatient() {
+
+            }
+
+            function informUser() {
+
+            }
+
+            function showMessage(aMessage, withCancel, timed) {
+                if (typeof (tstMessageBar) == "undefined") {
+                    __$("content").innerHTML += "<div id='messageBar' class='messageBar'></div>";
+                    tstMessageBar = __$('messageBar');
+                }
+
+                var messageBar = tstMessageBar;
+                messageBar.innerHTML = aMessage +
+                        "<br />" + (typeof (withCancel) != "undefined" ? (withCancel == true ?
+                                "<button onmousedown='tstMessageBar.style.display = \"none\"; " +
+                                "clearTimeout(tstTimerHandle);'><span>" + (typeof (tstLocaleWords) != "undefined" ?
+                                        (tstLocaleWords["cancel"] ? tstLocaleWords["cancel"] : "Cancel") : "Cancel") + "</span></button>" : "") : "") +
+                        "<button style='' onmousedown='tstMessageBar.style.display = \"none\"; " +
+                        "clearTimeout(tstTimerHandle); eval(tstTimerFunctionCall);'><span>" + (typeof (tstLocaleWords) != "undefined" ?
+                                (tstLocaleWords["ok"] ? tstLocaleWords["ok"] : "OK") : "OK") + "</span></button>";
+                if (aMessage.length > 0) {
+                    messageBar.style.display = 'block'
+                    if ((typeof (timed) == "undefined" ? true : timed) == true) {
+                        window.setTimeout("hideMessage()", 3500)
+                    }
+                }
+            }
+
+            function hideMessage() {
+                tstMessageBar.style.display = 'none'
+            }
+
+            function __$(elementID) {
+                return document.getElementById(elementID);
+            }
+        </script>
+
+        <script src="/javascripts/jquery-1.3.2.min.js" type="text/javascript"></script>
+        <script src="/javascripts/barcode.js" type="text/javascript"></script>
+
+        <link rel="stylesheet" type="text/css" href="/stylesheets/touch-fancy.css"/>
+        <link rel="stylesheet" type="text/css" href="/stylesheets/dashboard.css"/>
+
+        <style type="text/css">
+            #barcode {
+                background:transparent none repeat scroll 0 0;
+                border-color:-moz-use-text-color -moz-use-text-color silver;
+                border-style:none none solid;
+                border-width:medium medium 1px;
+                font-family:"Nimbus Sans L","Arial Narrow",sans-serif;
+                font-size:2.2em;
+                padding-left:5px;
+                width:800px;      
+            }
+
+            #header div {
+                font-weight:normal;
+                float:none;
+                clear:both;
+            }
+
+            .barcode_img{
+                width: 140%;
+            }
+
+            .messageBar {
+                background-color: tomato;
+                border: 5px outset tomato;
+                border-radius: 15px;
+                font-size: 2em;
+                left: 30%;
+                padding: 10px;
+                position: absolute;
+                text-align: center;
+                top: 100px;
+                width: 450px;
+                z-index: 999;
+            }
+
+            body {
+                -moz-user-select:none;
+            }
+
+            table {
+                vertical-align:center;
+                width: 80%;
+                -moz-user-select:none;
+                padding-left: 20%;
+                padding-top: 3%;
+            }
+
+            .container {
+                height: 92%;
+                background-color: #FFFFDD;
+                margin: 20px 20px 20px 20px;
+                overflow: auto;
+            }
+
+            .data { 
+                padding-left: 5px;
+            }
+
+            td {
+                text-align: left;
+                border-style: solid;
+                border-width: 1px;
+                text-align: left;
+                word-wrap: break-word;
+            }
+
+            th {
+                text-align: left;
+                border-style: solid;
+                border-width: 1px;
+                padding-left: 5px;
+                text-align: left;
+            }
+
+            a {
+                background-color: grey;
+                border-bottom: 1px outset #EEEEEE;
+                border-style: outset;
+                border-top: 1px outset #EEEEEE;
+                color: white;
+                display: block;
+                padding: 10px 16px 10px 10px;
+                text-align: center;
+                text-decoration: none;
+            }
+            
+            #continue{
+                float: right;
+            }
+            
+            .header_td{
+                text-align: center;
+                line-height: 7px;
+            }
+        </style>
+
+    </head>
+    <body id="mateme">  
+        <div id="container">      
+            <div id="content" style = "position : relative; width : 98%; margin-left : -49%;">
+                <table>
+                    <tr>
+                        <td colspan='2' class='header_td'><h3>PATIENT CONFIRMATION</h3></td>
+                    </tr>
+                    <tr>
+                        <th>National ID</th>
+                        <td class='anchor_class'><a href="#"><%= patientIdentifiers["National id"] %></a></td>
+                    </tr>
+                    <tr>
+                        <th>First Name</th>
+                        <td class='anchor_class'><a href="#"><%= personNames["given_name"] %></a></td>
+                    </tr>
+                    <tr>
+                        <th>Last Name</th>
+                        <td class='anchor_class'><a href="#"><%= personNames["family_name"] %></a></td>
+                    </tr>
+                    <tr>
+                        <th>Age</th>
+                        <td class='anchor_class'><a href="#"><%= age %> </a></td>
+                    </tr>
+                    <tr>
+                        <th>Gender</th>
+                        <td class='anchor_class'><a href="#"><%= gender %></a></td>
+                    </tr>
+                    <tr>
+                        <th>Current Residence</th>
+                        <td class='anchor_class'><a href="#"><%= personAddress["city_village"] %></a></td>
+                    </tr>
+                    <tr>
+                        <th>Current Traditional Authority</th>
+                        <td class='title'><a href="#"><%= personAddress["county_district"] %></a></td>
+                    </tr>
+
+                    <tr> 
+                        <th>Home District</th>
+                        <td class='anchor_class'><a href="#"><%= personAddress["state_province"] %></a></td> 
+                    </tr>
+                    <tr> 
+                        <th>Cell Phone #</th>
+                        <td class='anchor_class'> <a href="#"><%= personAttributes["cell_phone_number"] %></a></td> 
+                    </tr>
+                    <tr> 
+                        <th>Home Phone #</th>
+                        <td class='anchor_class'><a href="#"><%= personAttributes["home_phone_number"] %></a></td> 
+                    </tr>
+                    <tr>
+                        <th>Occupation</th>
+                        <td class='anchor_class'><a href="#"><%= personAttributes["occupation"] %></a></td>
+                    </tr>
+                </table>
+
+                <div id="footer" class="dark">
+                    <div id="buttons" class="buttons" style="top:0px">
+                        <button id="continue" class="green right" onclick="correctPatient()"><span>Continue</span></button>
+                        <button id="cancel" class="blue left" onclick="WrongPatient()"><span>Scan Again</span></button>
+                    </div>
+                </div>
+            </div> 
+        </div>
+    </body>
+</html>
