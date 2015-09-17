@@ -13,11 +13,11 @@
             var tstTimerFunctionCall = "";
 
             function correctPatient() {
-
+                window.location = "/patients/show/<%= patientIdentifiers['National id'] %>"
             }
 
             function WrongPatient() {
-
+                window.location = "/patients/scan_barcode";
             }
 
             function informUser() {
