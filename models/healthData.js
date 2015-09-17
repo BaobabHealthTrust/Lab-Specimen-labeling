@@ -1,4 +1,4 @@
-var bookshelf = require('../db/bookshelf');
+var bookshelf = require('../db/bookshelf').bookshelf;
 
 var LabParameter = bookshelf.Model.extend({
     tableName: 'Lab_Parameter',

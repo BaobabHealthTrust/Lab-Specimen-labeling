@@ -1,12 +1,14 @@
 var express = require('express');
 var router = express.Router();
 var model = require('../models/healthData');
+var knex = require('../db/bookshelf').knex;
 var loadUser = require('../force_login');
 var Client = require('node-rest-client').Client;
 client = new Client();
 var bartConfig = require('../bart_config');
 var bartHost = bartConfig.host;
 var bartPort = bartConfig.port;
+var facilityName = bartConfig.facilityName;
 var bartAddress = "http://" + bartHost + ':' + bartPort + "/people/remote_demographics"
 
 /* GET users listing. */
@@ -148,103 +150,45 @@ router.get('/new_lab_results/:identifier', /*loadUser,*/ function (req, res, nex
 
 router.post('/process_lab_results', function (request, response) {
     var labResult = request.body.lab_result;
-    var testDate = request.body.test_date;
-    var testValue = request.body.test_value;
     var patientIdentifier = request.body.patient_identifier;
-    var testModifier = testValue.match(/=|<|>/)[0];
-    var testValue = testValue.replace(/>/g, '').replace(/</g, '').replace(/=/g, '');
+    var userId = request.session.session_user_id;
 
     today = new Date();
-    orderTime = today.getHours() + ':' + today.getMinutes() + ':' + today.getSeconds();
+    minutes = today.getMinutes();
+    if (parseInt(minutes) < 10) {
+        minutes = '0' + minutes;
+    }
+
+    orderTime = today.getHours() + ':' + minutes + ':' + today.getSeconds();
     LabTestType = model.LabTestType;
     LabTestTable = model.LabTestTable;
     LabPanel = model.LabPanel;
     LabSample = model.LabSample;
     LabParameter = model.LabParameter;
 
-    new LabTestType({TestName: labResult}).fetch().then(function (lab_test_type) {
-        console.log(lab_test_type.toJSON());
-        Panel_ID = lab_test_type.get('Panel_ID');
-        new LabPanel({rec_id: Panel_ID}).fetch().then(function (lab_panel) {
-            testShortName = lab_panel.get('short_name');
-            new LabTestTable({
-                TestOrdered: testShortName,
-                Pat_ID: patientIdentifier,
-                OrderDate: testDate,
-                OrderTime: orderTime,
-                OrderedBy: '#',
-                Location: '#'
-            }).save().then(function (lab_test_table) {
-                console.log('Lab Test Table Saved')
-                console.log(lab_test_table)
-                console.log(JSON.stringify(lab_test_table))
-                new LabSample({
-                    AccessionNum: lab_test_table.get('AccessionNum'),
-                    USERID: '#',
-                    TESTDATE: testDate,
-                    PATIENTID: patientIdentifier,
-                    DATE: testDate,
-                    TIME: orderTime,
-                    SOURCE: '#',
-                    DeleteYN: 0,
-                    Attribute: 'pass',
-                    TimeStamp: new Date()
-                }).save().then(function (lab_sample) {
-                    console.log('Lab Sample Saved');
-                    console.log(lab_sample);
-                    new LabParameter({
-                        Sample_ID: lab_sample.get('Sample_ID'), //lab_sample.Sample_ID,
-                        TESTTYPE: '#',
-                        TESTVALUE: testValue,
-                        TimeStamp: new Date(),
-                        Range: testModifier
-                    }).save().then(function (lab_parameter) {
-                        console.log('Lab Parameter also saved');
-                        console.log(lab_parameter);
-                    });
+    knex.table('LabTestTable').max('AccessionNum as AccessionNum').then(function (maxValue) {
+        AccessionNum = maxValue[0]["AccessionNum"] + 1;
+        new LabTestType({TestName: labResult}).fetch().then(function (lab_test_type) {
+            Panel_ID = lab_test_type.get('Panel_ID');
+            new LabPanel({rec_id: Panel_ID}).fetch().then(function (lab_panel) {
+                testShortName = lab_panel.get('short_name');
+                new LabTestTable({
+                    AccessionNum: AccessionNum,
+                    TestOrdered: testShortName,
+                    Pat_ID: patientIdentifier,
+                    OrderDate: today,
+                    OrderTime: orderTime,
+                    OrderedBy: userId,
+                    Location: facilityName
+                }).save(null, {method: 'insert'}).then(function (lab_test_table) {
+                    //null, {method: 'insert'} forces knex to save a new record when PK is being tampered.
+                    console.log('Record Successfully Saved');
+                    console.log(lab_test_table);
+                    request.redirect("/patients/scan_barcode");
                 });
             });
-        })
+        });
     });
-
-
-    /*new LabTestTable({
-     TestOrdered: '#',
-     Pat_ID: patientIdentifier,
-     OrderDate: testDate,
-     OrderTime: orderTime,
-     OrderedBy: '#',
-     Location: '#'
-     }).save().then(function (lab_test_table) {
-     console.log('Lab Test Table Saved')
-     console.log(lab_test_table)
-     console.log(JSON.stringify(lab_test_table))
-     new LabSample({
-     AccessionNum: lab_test_table.get('AccessionNum'),
-     USERID: '#',
-     TESTDATE: testDate,
-     PATIENTID: patientIdentifier,
-     DATE: testDate,
-     TIME: orderTime,
-     SOURCE: '#',
-     DeleteYN: 0,
-     Attribute: 'pass',
-     TimeStamp: new Date()
-     }).save().then(function (lab_sample) {
-     console.log('Lab Sample Saved');
-     console.log(lab_sample);
-     new LabParameter({
-     Sample_ID: lab_sample.get('Sample_ID'), //lab_sample.Sample_ID,
-     TESTTYPE: '#',
-     TESTVALUE: testValue,
-     TimeStamp: new Date(),
-     Range: testModifier
-     }).save().then(function (lab_parameter) {
-     console.log('Lab Parameter also saved');
-     console.log(lab_parameter);
-     });
-     });
-     });*/
 })
 
 function isEmpty(obj) {

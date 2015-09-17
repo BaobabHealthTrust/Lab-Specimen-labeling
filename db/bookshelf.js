@@ -10,6 +10,8 @@ dbConfig = {
 }
 
 var knex = require('knex')(dbConfig);
+bookshelf = require('bookshelf')(knex);
+tools = {knex : knex, bookshelf: bookshelf}
 
-module.exports = require('bookshelf')(knex);
+module.exports = tools;
 
