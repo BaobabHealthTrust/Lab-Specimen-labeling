@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var Client = require('node-rest-client').Client;
+var model = require('../models/healthData');
 var loadUser = require('../force_login');
 var bartConfig = require('../bart_config');
 var bartHost = bartConfig.host;
@@ -31,34 +32,25 @@ router.get('/logout', function (req, res, next) {
 
 router.post('/process_authentication', function (request, response) {
 
-    var username = request.body.username;
-    var password = request.body.password;
-    var args = {
-        data: {login: username, password: password},
-        headers: {"Content-Type": "application/json"}
-    };
-    client.post(bartAddress, args, function (data, res) {
-        var resp = JSON.parse(data);
-        var authToken = resp.auth_token;
-        if (authToken.length > 0) {
-            //User is authenticated
-            //Need to create some sessions here
-            request.session.session_user_id = Math.floor((Math.random() * 100) + 1); //Return a random number between 1 and 100:
+    password = request.body.password;
+    LabTestType = model.LabTestType;
+    LabTestTable = model.LabTestTable;
+    LabPanel = model.LabPanel;
+    LabSample = model.LabSample;
+    LabParameter = model.LabParameter;
+    Clinician = model.Clinician;
+
+    new Clinician({Clinician_ID: password}).fetch().then(function (user) {
+        if (user) {
+            request.session.session_user_id = user.get('Clinician_ID');
+            request.session.user = user.toJSON()
             response.redirect('/patients/scan_barcode');
         }
         else {
-            //User is not authenticated
-            request.session.authenticated = false
+            request.session.authenticated = false;
             response.redirect('/users/login');
         }
-        //console.log(response);
-    }).on('error', function (err) {
-        //URL not found
-        request.session.bart_error = 'true';
-        response.redirect('/users/login');
-    });
-    ;
-    //console.log('Username = ' + username + '&password=' + password);
+    })
 
 });
 

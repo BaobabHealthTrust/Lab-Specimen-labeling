@@ -35,7 +35,12 @@ var LabPanel = bookshelf.Model.extend({
     tableName: 'map_lab_panel'
 });
 
+var Clinician = bookshelf.Model.extend({
+    tableName: 'Clinician',
+    idAttribute: 'Clinician_ID'
+});
+
 models = {LabParameter: LabParameter, LabSample: LabSample, LabTestTable: LabTestTable,
-    LabTestType: LabTestType, Lab: Lab, LabPanel: LabPanel};
+    LabTestType: LabTestType, Lab: Lab, LabPanel: LabPanel, Clinician: Clinician};
 
 module.exports = models;

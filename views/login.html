@@ -10,11 +10,11 @@
         
         function informUser(){
             <% if (authenticated == false) { %>
-                    showMessage("Wrong username/password combination")         
+                    showMessage("Wrong secret code");         
             <% } %>
         
             <% if (bart_error == 'true') { %>
-                    showMessage("Unable to connect to BART2. Configure BART2 to run first")         
+                    showMessage("Unable to connect to BART2. Configure BART2 to run first");         
             <% } %>
         
             <% if (logged_out == 'true') { %>
@@ -24,13 +24,18 @@
 
 window.setTimeout("informUser();", 350);
 </script>
+<style>
+    #cancelButton{
+        display: none;
+    }
+</style>
 <% include header.html %>
 <body id="mateme">
     <div id="container">
         <div id="content">
             <form id='sessions' action="/users/process_authentication" method='post'>
-                <input type='text' helptext='Username' field_type='password' name='username'/>
-                <input type='password' helptext='Password' field_type='password' name='password' textCase = 'lower'/>
+                <input type='password' helptext='Enter your secret code' field_type='number' name='password' 
+                       tt_pageStyleClass = 'Numeric NumbersOnly'/>
             </form>
             <!--<div id="footer">
             </div>-->
