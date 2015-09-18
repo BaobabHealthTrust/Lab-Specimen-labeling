@@ -22,10 +22,14 @@
 
             function setAttributes() {
                 divBtn = document.getElementById('buttons');
-                divBtn.innerHTML += "<button onclick='newResults();' class='left button navButton' id='newResultsButton'><span>Enter results</span></button>"
-                divBtn.innerHTML += "<button class='left button navButton' id='vlResultsButton'><span>Edit Lab results</span></button>"
+                divBtn.innerHTML += "<button onclick='newResults();' class='left button navButton' id='newResultsButton'><span>Order Tests</span></button>"
+                divBtn.innerHTML += "<button onclick='manageTestsOrdered()'class='left button navButton' id='vlResultsButton'><span>Manage Tests Ordered</span></button>"
             }
 
+            function manageTestsOrdered(){
+                window.location = "/patients/manage_orders/<%= patientIdentifiers['National id'] %>"
+            }
+            
             function displayTestsOrdered() {
                 var html = "";
                 tbody = document.getElementById('tbody');

@@ -66,7 +66,7 @@ router.get('/show/:identifier?', /*loadUser,*/ function (req, res, next) {
             patientIdentifiers: patientIdentifiers, gender: gender, birthDay: birthDay,
             birthMonth: birthMonth, birthYear: birthYear, age: age, testsOrdered: testsOrdered
         });
-    })
+    });
 
 });
 
@@ -205,6 +205,16 @@ router.post('/process_lab_results', function (request, response) {
         });
     });
 })
+
+router.get('/manage_orders/:identifier', /*loadUser,*/ function (req, res, next) {
+    patientIdentifier = req.params.identifier;
+    knex('LabTestTable').where({Pat_ID: patientIdentifier}).select(
+            'AccessionNum', 'TestOrdered', 'OrderDate', 'OrderTime', 'OrderedBy'
+            ).then(function (testsOrdered) {
+        //testsOrdered = JSON.stringify(testsOrdered);
+        res.render('manage_orders', {testsOrdered: testsOrdered, patientIdentifier: patientIdentifier});
+    });
+});
 
 function isEmpty(obj) {
     try {
