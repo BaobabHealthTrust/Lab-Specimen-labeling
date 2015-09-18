@@ -27,7 +27,8 @@
             }
 
             function displayTestsOrdered() {
-                var html = "<table>";
+                var html = "";
+                tbody = document.getElementById('tbody');
                 for (var x = 0; x <= testsOrdered.length - 1; x++) {
                     html += "<tr>";
                     for (var y = 0; y <= testsOrdered[x].length - 1; y++) {
@@ -36,11 +37,13 @@
                         OrderDate = testsOrdered[x][y][2];
                         OrderTime = testsOrdered[x][y][3];
                         OrderedBy = testsOrdered[x][y][4];
+                        html += '<td><a href ="#">' + TestOrdered + '</a></td>';
                     }
                     html += "</tr>";
-                    console.log('______________________________________')
+
                 }
                 html += "<table>";
+                tbody.innerHTML = html;
             }
         </script>
 
@@ -117,10 +120,45 @@
             #details .label{
                 padding-left: 60px;
             }
+
+            #lab_results {
+                border-width: 2px 0px 2px 0px;
+                border-style: solid;
+                height: 500px;
+                padding-left: 120px;
+                padding-top: 20px;
+                padding-right: 5px;
+                width: 97%;
+                overflow: auto; 
+            }
+
+            #headdiv {
+                padding-left:10px;
+            }
+
+            a {
+                background-color: grey;
+                border-bottom: 1px outset black;
+                border-style: outset;
+                border-top: 1px outset black;
+                color: white;
+                display: block;
+                padding: 10px 16px 10px 10px;
+                text-align: center;
+                text-decoration: none;
+            }
+
+            td {
+                padding-top: 5px;
+                padding-bottom: 5px;
+                width: 310px;
+            }
         </style>
 
     </head>
-    <body id="mateme" onload="setTimeout('setAttributes();', 100);">
+    <body id="mateme" onload="setTimeout('setAttributes();', 100);
+            displayTestsOrdered()
+          ">
         <div id="container">
             <div id="content">
                 <div id = 'headdiv'>
@@ -134,8 +172,13 @@
                 </div>
 
                 <div id = "lab_results">
+                    <table id="results_table">
+                        <tbody id="tbody">
 
+                        </tbody>
+                    </table>
                 </div>
+
                 <div id="footer">
                     <div id="buttons" class="buttonsDiv" style="width: 100%;">
                         <button id="finishButton" class="button navButton green" onclick="if (tt_cancel_destination)

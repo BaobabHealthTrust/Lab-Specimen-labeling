@@ -58,7 +58,7 @@ router.get('/show/:identifier?', /*loadUser,*/ function (req, res, next) {
                     );
         }
 
-        testsOrdered = arrayGroup(array, 3);
+        testsOrdered = arrayGroup(array, 4);
         testsOrdered = JSON.stringify(testsOrdered)
 
         res.render('show', {title: 'Patients Home Page', personAddress: personAddress,
@@ -199,8 +199,8 @@ router.post('/process_lab_results', function (request, response) {
                 }).save(null, {method: 'insert'}).then(function (lab_test_table) {
                     //null, {method: 'insert'} forces knex to save a new record when PK is being tampered.
                     console.log('Record Successfully Saved');
-                    console.log(lab_test_table);
-                    request.redirect("/patients/scan_barcode");
+                    console.log('Request = ' + request)
+                    request.redirect("/patients/show/" + patientIdentifier);
                 });
             });
         });
