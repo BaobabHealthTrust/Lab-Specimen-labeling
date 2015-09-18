@@ -50,6 +50,17 @@ router.get('/show/:identifier?', /*loadUser,*/ function (req, res, next) {
     knex('LabTestTable').where({Pat_ID: patientIdentifiers['National id']}).select(
             'AccessionNum', 'TestOrdered', 'OrderDate', 'OrderTime', 'OrderedBy'
             ).then(function (testsOrdered) {
+        array = []
+
+        for (var test in testsOrdered) {
+            array.push([testsOrdered[test].AccessionNum, testsOrdered[test].TestOrdered, testsOrdered[test].OrderDate,
+                testsOrdered[test].OrderTime, testsOrdered[test].OrderedBy]
+                    );
+        }
+
+        testsOrdered = arrayGroup(array, 3);
+        testsOrdered = JSON.stringify(testsOrdered)
+
         res.render('show', {title: 'Patients Home Page', personAddress: personAddress,
             personAttributes: personAttributes, personNames: personNames,
             patientIdentifiers: patientIdentifiers, gender: gender, birthDay: birthDay,
@@ -197,7 +208,12 @@ router.post('/process_lab_results', function (request, response) {
 })
 
 function isEmpty(obj) {
-    return Object.keys(obj).length === 0;
+    try {
+        return Object.keys(obj).length === 0;
+    }
+    catch (e) {
+        return true; //If it is non object, return true
+    }
 }
 
 function getAge(dateString) {
@@ -211,4 +227,20 @@ function getAge(dateString) {
     return age;
 }
 
+function arrayGroup(arr, maxPerGroup) {
+    var result = [];
+    var tempArr = [];
+    for (var i = 1; i <= arr.length; i++) {
+        tempArr.push(arr[i - 1]);
+        if (i % maxPerGroup === 0) {
+            result.push(tempArr);
+            tempArr = [];
+        }
+    }
+
+    if (tempArr.length > 0 && tempArr.length < maxPerGroup) {
+        result.push(tempArr);
+    }
+    return result;
+}
 module.exports = router;

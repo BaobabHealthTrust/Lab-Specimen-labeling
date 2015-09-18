@@ -9,6 +9,7 @@
             tstCurrentDate = "2015-Sept-08";
             var tt_cancel_destination = null;
             var tt_cancel_destination = "/patients/scan_barcode";
+            var testsOrdered = JSON.parse('<%- testsOrdered %>');
 
             function setInnerHtmlData(id, result, path) {
                 td = document.getElementById(id);
@@ -25,6 +26,22 @@
                 divBtn.innerHTML += "<button class='left button navButton' id='vlResultsButton'><span>Edit Lab results</span></button>"
             }
 
+            function displayTestsOrdered() {
+                var html = "<table>";
+                for (var x = 0; x <= testsOrdered.length - 1; x++) {
+                    html += "<tr>";
+                    for (var y = 0; y <= testsOrdered[x].length - 1; y++) {
+                        AccessionNum = testsOrdered[x][y][0];
+                        TestOrdered = testsOrdered[x][y][1];
+                        OrderDate = testsOrdered[x][y][2];
+                        OrderTime = testsOrdered[x][y][3];
+                        OrderedBy = testsOrdered[x][y][4];
+                    }
+                    html += "</tr>";
+                    console.log('______________________________________')
+                }
+                html += "<table>";
+            }
         </script>
 
         <% include header.html %>
@@ -96,7 +113,7 @@
                 margin-left: -10px;
                 width: 106%;
             }
-            
+
             #details .label{
                 padding-left: 60px;
             }
@@ -110,9 +127,9 @@
                     <div id="details">
                         <span class="identifier"><%= patientIdentifiers["National id"] %></span><br/>
                         <hr></hr>
-                            <span class="label" style="padding-right:80px">Name</span>: <%= personNames["given_name"] + ' ' + personNames["family_name"]%> (<%= gender %>)<br />
-                            <span class="label" style="padding-right:42px">Residence</span>: <%= personAddress["city_village"] %><br />
-                            <span class="label" style="padding-right:92px">Age</span>: <%= age %>
+                        <span class="label" style="padding-right:80px">Name</span>: <%= personNames["given_name"] + ' ' + personNames["family_name"]%> (<%= gender %>)<br />
+                        <span class="label" style="padding-right:42px">Residence</span>: <%= personAddress["city_village"] %><br />
+                        <span class="label" style="padding-right:92px">Age</span>: <%= age %>
                     </div>
                 </div>
 
