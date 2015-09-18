@@ -47,11 +47,16 @@ router.get('/show/:identifier?', /*loadUser,*/ function (req, res, next) {
     birthdate = new Date(parseInt(birthYear), parseInt(birthMonth) - 1, parseInt(birthDay));
     age = getAge(birthdate);
 
-    res.render('show', {title: 'Patients Home Page', personAddress: personAddress,
-        personAttributes: personAttributes, personNames: personNames,
-        patientIdentifiers: patientIdentifiers, gender: gender, birthDay: birthDay,
-        birthMonth: birthMonth, birthYear: birthYear, age: age
-    });
+    knex('LabTestTable').where({Pat_ID: patientIdentifiers['National id']}).select(
+            'AccessionNum', 'TestOrdered', 'OrderDate', 'OrderTime', 'OrderedBy'
+            ).then(function (testsOrdered) {
+        res.render('show', {title: 'Patients Home Page', personAddress: personAddress,
+            personAttributes: personAttributes, personNames: personNames,
+            patientIdentifiers: patientIdentifiers, gender: gender, birthDay: birthDay,
+            birthMonth: birthMonth, birthYear: birthYear, age: age, testsOrdered: testsOrdered
+        });
+    })
+
 });
 
 router.get('/confirm/:identifier?', /*loadUser,*/ function (req, res, next) {
