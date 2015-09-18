@@ -168,7 +168,6 @@ router.post('/process_lab_results', function (request, response) {
     var labResult = request.body.lab_result;
     var patientIdentifier = request.body.patient_identifier;
     var userId = request.session.session_user_id;
-
     today = new Date();
     minutes = today.getMinutes();
     if (parseInt(minutes) < 10) {
@@ -199,9 +198,9 @@ router.post('/process_lab_results', function (request, response) {
                 }).save(null, {method: 'insert'}).then(function (lab_test_table) {
                     //null, {method: 'insert'} forces knex to save a new record when PK is being tampered.
                     console.log('Record Successfully Saved');
-                    console.log('Request = ' + request)
-                    request.redirect("/patients/show/" + patientIdentifier);
-                });
+                    response.redirect("/patients/show/" + patientIdentifier);
+                })
+                        ;
             });
         });
     });
