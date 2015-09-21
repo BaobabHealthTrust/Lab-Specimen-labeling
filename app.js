@@ -41,6 +41,7 @@ app.use('/patients/process_lab_results', patients);
 app.use('/patients/confirm/:identifier?', patients);
 app.use('/patients/manage_orders/:identifier?', patients);
 app.use('/patients/delete_orders', patients);
+app.use('/patients/print_orders/:identifier?', patients);
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
     var err = new Error('Not Found');

@@ -237,6 +237,13 @@ router.get('/manage_orders/:identifier', /*loadUser,*/ function (req, res, next)
     });
 });
 
+router.get('/print_orders/:identifier?', /*loadUser,*/ function (req, res, next) {
+    patientIdentifier = req.query.identifier;
+    testOrdered = req.query.testOrdered;
+    accessionNum = req.query.accessionNum;
+    res.render('print_orders', {accessionNum: accessionNum, testOrdered: testOrdered, patientIdentifier: patientIdentifier});
+});
+
 function isEmpty(obj) {
     try {
         return Object.keys(obj).length === 0;
