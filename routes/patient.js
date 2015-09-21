@@ -264,7 +264,7 @@ router.get('/download_order/:identifier?', /*loadUser,*/ function (req, res, nex
         month = months[date.getMonth()];
         dateTimeOrdered = date.getDate() + '/' + month + '/' + date.getFullYear() + ' ' + orderTime;
         console.log(dateTimeOrdered)
-        fileName = '/tmp/' + new Date().getTime() + '.lbl';
+        fileName = '/tmp/' + new Date().getTime() + '.lbs';
         var data = "\nN\n" +
                 "q500\n" +
                 "Q165,026\n" +
