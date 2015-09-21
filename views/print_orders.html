@@ -2,34 +2,45 @@
     <head>
         <title></title>
         <script src="/javascripts/jquery-1.9.1.js" type="text/javascript"></script>
+        <link rel="stylesheet" type="text/css" href="/stylesheets/touch-fancy.css"/>
+        <link rel="stylesheet" type="text/css" href="/stylesheets/dashboard.css"/>
         <style type='text/css'>
             body{
                 font-family: "Nimbus Sans L", "Arial Narrow", sans-serif;
             }
 
+            #content {
+                background: #ffffff none repeat scroll 0 0;
+                height: 750px;
+                margin-left: 0.5%;
+                margin-right: 0.5%;
+                margin-top: -380px;
+                position: absolute;
+            }
         </style>
 
         <script>
 
             function redirectMe() {
                 jQuery('#printIframe').load(function () {
-                    document.location = '';
+                    //document.location = '';
                 });
             }
 
         </script>
     </head>
-    
-    <% include header.html %>
-    
-    <body>
-        <br/><br/><br/>
-        <center> <h1 id="printMessage">Printing please wait.....</h1></center>
 
-        <iframe id="printIframe" src="" style='display:none'></iframe>
+    <body id="container">
+        <div id="content" style = "position : relative; width : 98%; margin-left : -49%; ">
+            <br /><br />
+            <center> <h1 id="printMessage">Printing please wait.....</h1></center>
+
+            <iframe id="printIframe" src="" style='display:none'></iframe>
+
+        </div>
 
         <script type='text/javascript'>
-            setTimeout(redirectMe(), 350);
+            //setTimeout(redirectMe(), 350);
         </script>
     </body>
 </html>
