@@ -10,7 +10,7 @@ var bartHost = bartConfig.host;
 var bartPort = bartConfig.port;
 var facilityName = bartConfig.facilityName;
 var bartAddress = "http://" + bartHost + ':' + bartPort + "/people/remote_demographics"
-
+var fs = require('fs');
 /* GET users listing. */
 router.get('/', function (req, res, next) {
     res.send('respond with a resource');
@@ -245,10 +245,25 @@ router.get('/print_orders/:identifier?', /*loadUser,*/ function (req, res, next)
 });
 
 router.get('/download_order/:identifier?', /*loadUser,*/ function (req, res, next) {
-    patientIdentifier = req.query.identifier;
-    testOrdered = req.query.testOrdered;
-    accessionNum = req.query.accessionNum;
-    
+    patientIdentifier = 'ddd'//req.query.identifier;
+    testOrdered = 'Viral Load - 20201'//req.query.testOrdered;
+    accessionNum = 20201;//req.query.accessionNum;
+    dateTimeOrdered = '21-Sep-2015 11:26';
+    name = 'Dummy 1 Patient 1 P1700-0000-0022';
+    fileName = '/tmp/' + new Date().getTime() + '.lbl';
+    var data = "\nN\n" +
+            "q500\n" +
+            "Q165,026\n" +
+            "ZT\n" +
+            "B50,105,0,1,4,8,50,N,'" + accessionNum + "'\n" +
+            "A35,30,0,2,1,1,N,'" + name + "'\n" +
+            "A35,56,0,2,1,1,N,'" + testOrdered + "'\n" +
+            "A35,82,0,2,1,1,N,'" + dateTimeOrdered + "'\n" +
+            "P2"
+
+    fs.writeFile(fileName, data, function (err) {
+        res.download(fileName);
+    });
 });
 
 function isEmpty(obj) {

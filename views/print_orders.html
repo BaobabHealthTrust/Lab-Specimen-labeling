@@ -23,7 +23,7 @@
 
             function redirectMe() {
                 jQuery('#printIframe').load(function () {
-                    //document.location = '';
+                    document.location = '/patients/show/<%= patientIdentifier %>';
                 });
             }
 
@@ -35,12 +35,12 @@
             <br /><br />
             <center> <h1 id="printMessage">Printing please wait.....</h1></center>
 
-            <iframe id="printIframe" src="" style='display:none'></iframe>
+            <iframe id="printIframe" src="/patients/download_order?identifier=P9090" style='display:none'></iframe>
 
         </div>
 
         <script type='text/javascript'>
-            //setTimeout(redirectMe(), 350);
+            setTimeout(redirectMe(), 350);
         </script>
     </body>
 </html>
