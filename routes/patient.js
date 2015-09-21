@@ -206,6 +206,27 @@ router.post('/process_lab_results', function (request, response) {
     });
 })
 
+router.post('/delete_orders', function (request, response) {
+    AccessionNum = request.body.accessionNum;
+    TestOrdered = request.body.testOrdered;
+    LabTestTable = model.LabTestTable;
+    console.log("AccessionNum = " + AccessionNum + " TestOrdered = " + TestOrdered);
+    /*knex('LabTestTable').where({AccessionNum: AccessionNum, TestOrdered: TestOrdered}).then(function (testOrdered) {
+     testOrdered.del()
+     response.send('Deleted Successfully');
+     })*/
+
+    /*var query = knex('LabTestTable')
+     .where({AccessionNum: AccessionNum, TestOrdered: TestOrdered})
+     .del();
+     console.log(query.toString())*/
+    new LabTestTable({AccessionNum: AccessionNum, TestOrdered: TestOrdered})
+            .destroy()
+            .then(function (model) {
+                response.send('Deleted Successfully');
+            });
+})
+
 router.get('/manage_orders/:identifier', /*loadUser,*/ function (req, res, next) {
     patientIdentifier = req.params.identifier;
     knex('LabTestTable').where({Pat_ID: patientIdentifier}).select(

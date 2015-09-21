@@ -8,24 +8,29 @@
             var tstUsername = "";
             var tstCurrentDate = "2015-Sept-08";
             var tt_cancel_destination = null;
-
+            var accessionNum = '';
+            var testOrdered = '';
             function goHome() {
                 window.location = "/patients/show/<%= patientIdentifier %>"
             }
 
             function confirmAction(obj) {
+                accessionNum = obj.getAttribute("AccessionNum");
+                testOrdered = obj.getAttribute("TestOrdered");
                 $('#myModal').modal('show');
             }
 
-            function deleteUser() {
-                /*jQuery.ajax({
-                 type: "POST",
-                 url: "#",
-                 data: "#",
-                 success: function () {
-                 
-                 
-                 });*/
+            function deleteOrder() {
+                console.log("AccessionNum = " + accessionNum + ' TestOrdered = ' + testOrdered);
+                jQuery.ajax({
+                    type: "POST",
+                    url: "/patients/delete_orders",
+                    data: "accessionNum=" + accessionNum + '&testOrdered=' + testOrdered,
+                    success: function (results) {
+                        console.log(results)
+                        window.location.reload();
+                    }
+                });
             }
         </script>
 
@@ -49,7 +54,7 @@
                 -moz-user-select:none;
                 padding-left: 7%;
                 padding-top: 3%;
-               
+
             }
 
             .container {
@@ -118,7 +123,7 @@
                                         <td style="text-align: center;"><%= testsOrdered[test].TestOrdered %></td>
                                         <td style="text-align: center;"><%= testsOrdered[test].OrderDate %></td>
                                         <td style="text-align: center;"><%= testsOrdered[test].OrderTime %></td>
-                                        <td onclick="confirmAction(this);"><button  style="width:98%;" class="btn btn-primary btn-large">Delete</button></td>
+                                        <td><button onclick="confirmAction(this);" AccessionNum='<%= testsOrdered[test].AccessionNum %>' TestOrdered='<%= testsOrdered[test].TestOrdered %>'  style="width:98%;" class="btn btn-primary btn-large">Delete</button></td>
                                     </tr>
                                     <% } %>
                                 </tbody>
@@ -141,7 +146,7 @@
                             <div class="modal-body">
                                 <span style="text-align:center;">You are about to delete this test you already ordered. You can not undo this action. Are you really very sure?<br /><br /><br /></span>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-primary btn-large" onclick="deleteUser();" data-dismiss="modal">Okay</button>
+                                    <button type="button" class="btn btn-primary btn-large" onclick="deleteOrder();" data-dismiss="modal">Okay</button>
                                     <button type="button" class="btn btn-large" data-dismiss="modal">Cancel</button>
                                 </div>
                             </div>
