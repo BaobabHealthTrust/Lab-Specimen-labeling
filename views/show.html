@@ -41,7 +41,7 @@
                         OrderDate = testsOrdered[x][y][2];
                         OrderTime = testsOrdered[x][y][3];
                         OrderedBy = testsOrdered[x][y][4];
-                        html += '<td><a href ="/patients/print_orders?identifier=P170000000022&accessionNum=2020&testOrdered=HIV_viral_load">' + TestOrdered + '</a></td>';
+                        html += "<td><a href ='/patients/print_orders?identifier=<%= patientIdentifiers['National id'] %>&accessionNum=" + AccessionNum + "&testOrdered=" + TestOrdered + "'>" + TestOrdered + "</a></td>";
                     }
                     html += "</tr>";
 
