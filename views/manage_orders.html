@@ -19,13 +19,13 @@
 
             function deleteUser() {
                 /*jQuery.ajax({
-                type: "POST",
-                        url: "#",
-                        data: "#",
-                        success: function () {
-
-
-                        });*/
+                 type: "POST",
+                 url: "#",
+                 data: "#",
+                 success: function () {
+                 
+                 
+                 });*/
             }
         </script>
 
@@ -45,12 +45,11 @@
 
             table {
                 vertical-align:center;
-                width: 95%;
+                width: 98%;
                 -moz-user-select:none;
-                padding-left: 5%;
+                padding-left: 7%;
                 padding-top: 3%;
-                border-collapse: inherit;
-                border-spacing: initial;
+               
             }
 
             .container {
@@ -80,17 +79,6 @@
                 text-align: left;
             }
 
-            a {
-                background-color: grey;
-                border-bottom: 1px outset #EEEEEE;
-                border-style: outset;
-                border-top: 1px outset #EEEEEE;
-                color: white;
-                display: block;
-                padding: 10px 16px 10px 10px;
-                text-align: center;
-                text-decoration: none;
-            }
 
             #continue{
                 float: right;
@@ -100,8 +88,8 @@
                 text-align: center;
                 line-height: 7px;
             }
-            
-            .modal-footer button:hover{
+
+            button:hover{
                 background: inherit;
             }
         </style>
@@ -111,29 +99,33 @@
         <div id="container">      
             <div id="content" style = "position : relative; width : 98%; margin-left : -49%;">
                 <div style="overflow:auto; height: 640px; padding-top: 10px;">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Accession Number</th>
-                                <th>Test Ordered</th>
-                                <th>Order Date</th>
-                                <th>Order Time</th>
-                                <th>&nbsp;</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <% for (var test in testsOrdered){ %>
-                            <tr>
-                                <td><%= testsOrdered[test].AccessionNum %></td>
-                                <td><%= testsOrdered[test].TestOrdered %></td>
-                                <td><%= testsOrdered[test].OrderDate %></td>
-                                <td><%= testsOrdered[test].OrderTime %></td>
-                                <td onclick="confirmAction(this);"><button  style="width:98%;" class="btn btn-primary btn-large">Delete</button></td>
-                            </tr>
-                            <% } %>
-                        </tbody>
+                    <div class="block-content collapse in">
+                        <div>
+                            <table table table-bordered>
+                                <thead>
+                                    <tr style="line-height: 3em;">
+                                        <th style="max-width: 40px; text-align: center ">Accession Number</th>
+                                        <th style="text-align: center;">Test Ordered</th>
+                                        <th style="text-align: center;">Order Date</th>
+                                        <th style="text-align: center;">Order Time</th>
+                                        <th>&nbsp;</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% for (var test in testsOrdered){ %>
+                                    <tr>
+                                        <td style="text-align: center;"><%= testsOrdered[test].AccessionNum %></td>
+                                        <td style="text-align: center;"><%= testsOrdered[test].TestOrdered %></td>
+                                        <td style="text-align: center;"><%= testsOrdered[test].OrderDate %></td>
+                                        <td style="text-align: center;"><%= testsOrdered[test].OrderTime %></td>
+                                        <td onclick="confirmAction(this);"><button  style="width:98%;" class="btn btn-primary btn-large">Delete</button></td>
+                                    </tr>
+                                    <% } %>
+                                </tbody>
 
-                    </table>
+                            </table>
+                        </div>
+                    </div>
                 </div>
 
                 <!--CONFIRMATION POPUP BEGIN -->
@@ -165,5 +157,6 @@
                 </div>
             </div> 
         </div>
+
     </body>
 </html>
