@@ -256,7 +256,6 @@ router.get('/download_order/:identifier?', /*loadUser,*/ function (req, res, nex
     knex('LabTestTable').where({Pat_ID: patientIdentifier, AccessionNum: accessionNum, TestOrdered: testOrdered}).select(
             'AccessionNum', 'TestOrdered', 'OrderDate', 'OrderTime', 'OrderedBy'
             ).then(function (testOrdered) {
-        console.log(testOrdered)
         orderDate = testOrdered[0].OrderDate;
         orderTime = testOrdered[0].OrderTime;
         months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
@@ -264,7 +263,8 @@ router.get('/download_order/:identifier?', /*loadUser,*/ function (req, res, nex
         month = months[date.getMonth()];
         dateTimeOrdered = date.getDate() + '/' + month + '/' + date.getFullYear() + ' ' + orderTime;
         console.log(dateTimeOrdered)
-        fileName = '/tmp/' + new Date().getTime() + '.lbs';
+        fname =  new Date().getTime() + '.lbl'
+        fileName = '/tmp/' + fname;
         var data = "\nN\n" +
                 "q500\n" +
                 "Q165,026\n" +
@@ -276,7 +276,24 @@ router.get('/download_order/:identifier?', /*loadUser,*/ function (req, res, nex
                 "P2"
 
         fs.writeFile(fileName, data, function (err) {
-            res.download(fileName);
+            var path = require('path');
+            var mime = require('mime');
+            //res.download(fileName);
+            var file = fileName;
+
+            var filename = path.basename(file);
+            var mimetype = mime.lookup(file);
+            res.setHeader('Content-disposition', 'inline; filename=' + fname);
+            res.setHeader('Content-type', 'application/label; charset=utf-8');
+            res.setHeader('stream', false);
+
+            var filestream = fs.createReadStream(file);
+            filestream.on('open', function () {
+                // This just pipes the read stream to the response object (which goes to the client)
+                filestream.pipe(res);
+            });
+
+            //filestream.pipe(res);
         });
     });
 });
