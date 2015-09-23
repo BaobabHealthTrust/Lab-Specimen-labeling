@@ -61,10 +61,16 @@ router.get('/show/:identifier?', /*loadUser,*/ function (req, res, next) {
          testsOrdered = arrayGroup(array, 4);
          testsOrdered = JSON.stringify(testsOrdered)*/
 
+        var print_url = '';
+        if (req.session.print_url) {
+            print_url = req.session.print_url;
+            req.session.print_url = null;
+        }
+
         res.render('show', {title: 'Patients Home Page', personAddress: personAddress,
             personAttributes: personAttributes, personNames: personNames,
             patientIdentifiers: patientIdentifiers, gender: gender, birthDay: birthDay,
-            birthMonth: birthMonth, birthYear: birthYear, age: age, testsOrdered: testsOrdered
+            birthMonth: birthMonth, birthYear: birthYear, age: age, testsOrdered: testsOrdered, printUrl: print_url
         });
     });
 
@@ -198,6 +204,9 @@ router.post('/process_lab_results', function (request, response) {
                 }).save(null, {method: 'insert'}).then(function (lab_test_table) {
                     //null, {method: 'insert'} forces knex to save a new record when PK is being tampered.
                     console.log('Record Successfully Saved');
+                    //src="/patients/download_order?identifier=<%= patientIdentifier %>&accessionNum=<%= accessionNum %>&testOrdered=<%= testOrdered %>"
+                    url = "/patients/download_order?identifier=" + patientIdentifier + '&accessionNum=' + AccessionNum + '&testOrdered=' + testShortName;
+                    request.session.print_url = url;
                     response.redirect("/patients/show/" + patientIdentifier);
                 })
                         ;

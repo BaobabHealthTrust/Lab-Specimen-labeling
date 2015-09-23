@@ -206,7 +206,7 @@
                         </table>
                     </div>
                 </div>
-                
+
                 <!--CONFIRMATION POPUP BEGIN -->
                 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
@@ -239,5 +239,15 @@
 
             </div>
         </div>
+
+        <iframe id="printIframe" src="" style="display: none;"></iframe>
+        
+        <script>
+            function loadIframe(){
+                iframe = document.getElementById('printIframe');
+                iframe.src = '<%- printUrl %>';
+            }
+            window.setTimeout("loadIframe();", 350);
+        </script>
     </body>
 </html>
