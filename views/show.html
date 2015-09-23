@@ -15,7 +15,7 @@
             var tt_cancel_destination = "/patients/scan_barcode";
             var accessionNum = '';
             var testOrdered = '';
-            
+
             function setInnerHtmlData(id, result, path) {
                 td = document.getElementById(id);
                 td.innerHTML = "<a href =" + path + ">" + result + "</a>"
@@ -31,14 +31,14 @@
                 divBtn.innerHTML += "<button onclick='manageTestsOrdered()'class='left button navButton' id='vlResultsButton'><span>Manage Tests Ordered</span></button>"
             }
 
-            function manageTestsOrdered(){
+            function manageTestsOrdered() {
                 window.location = "/patients/manage_orders/<%= patientIdentifiers['National id'] %>"
             }
-            
+
             function displayTestsOrdered() {
 
             }
-            
+
             function confirmAction(obj) {
                 accessionNum = obj.getAttribute("AccessionNum");
                 testOrdered = obj.getAttribute("TestOrdered");
@@ -46,7 +46,6 @@
             }
 
             function deleteOrder() {
-                console.log("AccessionNum = " + accessionNum + ' TestOrdered = ' + testOrdered);
                 jQuery.ajax({
                     type: "POST",
                     url: "/patients/delete_orders",
@@ -57,6 +56,15 @@
                     }
                 });
             }
+
+            function rePrintOrder(obj) {
+                identifier = '<%= patientIdentifier %>';
+                accessionNum = obj.getAttribute("AccessionNum");
+                testOrdered = obj.getAttribute("TestOrdered");
+                src = "/patients/download_order?identifier=" + identifier + "&accessionNum=" + accessionNum + "&testOrdered=" + testOrdered;
+                window.location = src;
+            }
+
         </script>
 
         <% include header.html %>
@@ -169,36 +177,36 @@
                         <span class="label" style="padding-right:92px">Age</span>: <%= age %>
                     </div>
                 </div>
-                
+
                 <div id="lab_results">
                     <div style="overflow: auto; width: 100%; height: 450px;">
-                            <table style="border-spacing: 0; border-collapse: initial;" >
-                                <thead>
-                                    <tr style="line-height: 3em;">
-                                        <th style="max-width: 40px; text-align: center ">Accession Number</th>
-                                        <th style="text-align: center;">Test Ordered</th>
-                                        <th style="text-align: center;">Order Date</th>
-                                        <th style="text-align: center;">Order Time</th>
-                                        <th>&nbsp;</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <% for (var test in testsOrdered){ %>
-                                    <tr>
-                                        <td style="text-align: center; border-bottom: 1px solid black;"><%= testsOrdered[test].AccessionNum %></td>
-                                        <td style="text-align: center; border-bottom: 1px solid black;"><%= testsOrdered[test].TestOrdered %></td>
-                                        <td style="text-align: center; border-bottom: 1px solid black;"><%= testsOrdered[test].OrderDate %></td>
-                                        <td style="text-align: center; border-bottom: 1px solid black;"><%= testsOrdered[test].OrderTime %></td>
-                                        <td><button onclick="rePrintOrder(this);" AccessionNum='<%= testsOrdered[test].AccessionNum %>' TestOrdered='<%= testsOrdered[test].TestOrdered %>'  style="width:98%;" class="btn btn-primary btn-large">Re-print</button></td>
-                                        <td><button onclick="confirmAction(this);" AccessionNum='<%= testsOrdered[test].AccessionNum %>' TestOrdered='<%= testsOrdered[test].TestOrdered %>'  style="width:98%;" class="btn btn-primary btn-large">Delete</button></td>
-                                    </tr>
-                                    <% } %>
-                                </tbody>
+                        <table style="border-spacing: 0; border-collapse: initial;" >
+                            <thead>
+                                <tr style="line-height: 3em;">
+                                    <th style="max-width: 40px; text-align: center ">Accession Number</th>
+                                    <th style="text-align: center;">Test Ordered</th>
+                                    <th style="text-align: center;">Order Date</th>
+                                    <th style="text-align: center;">Order Time</th>
+                                    <th>&nbsp;</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% for (var test in testsOrdered){ %>
+                                <tr>
+                                    <td style="text-align: center; border-bottom: 1px solid black;"><%= testsOrdered[test].AccessionNum %></td>
+                                    <td style="text-align: center; border-bottom: 1px solid black;"><%= testsOrdered[test].TestOrdered %></td>
+                                    <td style="text-align: center; border-bottom: 1px solid black;"><%= testsOrdered[test].OrderDate %></td>
+                                    <td style="text-align: center; border-bottom: 1px solid black;"><%= testsOrdered[test].OrderTime %></td>
+                                    <td><button onclick="rePrintOrder(this);" AccessionNum='<%= testsOrdered[test].AccessionNum %>' TestOrdered='<%= testsOrdered[test].TestOrdered %>'  style="width:98%;" class="btn btn-primary btn-large">Re-print</button></td>
+                                    <td><button onclick="confirmAction(this);" AccessionNum='<%= testsOrdered[test].AccessionNum %>' TestOrdered='<%= testsOrdered[test].TestOrdered %>'  style="width:98%;" class="btn btn-primary btn-large">Delete</button></td>
+                                </tr>
+                                <% } %>
+                            </tbody>
 
-                            </table>
+                        </table>
                     </div>
                 </div>
-
+                
                 <!--CONFIRMATION POPUP BEGIN -->
                 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
@@ -220,7 +228,7 @@
                     </div>
                 </div>
                 <!--CONFIRMATION POPUP END -->
-                
+
                 <div id="footer">
                     <div id="buttons" class="buttonsDiv" style="width: 100%;">
                         <button id="finishButton" class="button navButton green" onclick="if (tt_cancel_destination)

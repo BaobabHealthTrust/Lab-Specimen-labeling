@@ -53,13 +53,13 @@ router.get('/show/:identifier?', /*loadUser,*/ function (req, res, next) {
         array = []
 
         /*for (var test in testsOrdered) {
-            array.push([testsOrdered[test].AccessionNum, testsOrdered[test].TestOrdered, testsOrdered[test].OrderDate,
-                testsOrdered[test].OrderTime, testsOrdered[test].OrderedBy]
-                    );
-        }
-
-        testsOrdered = arrayGroup(array, 4);
-        testsOrdered = JSON.stringify(testsOrdered)*/
+         array.push([testsOrdered[test].AccessionNum, testsOrdered[test].TestOrdered, testsOrdered[test].OrderDate,
+         testsOrdered[test].OrderTime, testsOrdered[test].OrderedBy]
+         );
+         }
+         
+         testsOrdered = arrayGroup(array, 4);
+         testsOrdered = JSON.stringify(testsOrdered)*/
 
         res.render('show', {title: 'Patients Home Page', personAddress: personAddress,
             personAttributes: personAttributes, personNames: personNames,
@@ -245,7 +245,6 @@ router.get('/print_orders/:identifier?', /*loadUser,*/ function (req, res, next)
 });
 
 router.get('/download_order/:identifier?', /*loadUser,*/ function (req, res, next) {
-
     patientIdentifier = req.query.identifier;
     testName = req.query.testOrdered;
     accessionNum = req.query.accessionNum;
@@ -253,7 +252,7 @@ router.get('/download_order/:identifier?', /*loadUser,*/ function (req, res, nex
     personNames = person["person"]["names"];
     name = personNames["given_name"] + ' ' + personNames["family_name"] + ' ' + patientIdentifier;
 
-    knex('LabTestTable').where({Pat_ID: patientIdentifier, AccessionNum: accessionNum, TestOrdered: testOrdered}).select(
+    knex('LabTestTable').where({Pat_ID: patientIdentifier, AccessionNum: accessionNum, TestOrdered: testName}).select(
             'AccessionNum', 'TestOrdered', 'OrderDate', 'OrderTime', 'OrderedBy'
             ).then(function (testOrdered) {
         orderDate = testOrdered[0].OrderDate;
@@ -262,8 +261,7 @@ router.get('/download_order/:identifier?', /*loadUser,*/ function (req, res, nex
         date = new Date(orderDate)
         month = months[date.getMonth()];
         dateTimeOrdered = date.getDate() + '/' + month + '/' + date.getFullYear() + ' ' + orderTime;
-        console.log(dateTimeOrdered)
-        fname =  new Date().getTime() + '.lbl'
+        fname = new Date().getTime() + '.lbl'
         fileName = '/tmp/' + fname;
         var data = "\nN\n" +
                 "q500\n" +
