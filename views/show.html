@@ -13,7 +13,9 @@
             tstCurrentDate = "2015-Sept-08";
             var tt_cancel_destination = null;
             var tt_cancel_destination = "/patients/scan_barcode";
-
+            var accessionNum = '';
+            var testOrdered = '';
+            
             function setInnerHtmlData(id, result, path) {
                 td = document.getElementById(id);
                 td.innerHTML = "<a href =" + path + ">" + result + "</a>"
@@ -35,6 +37,25 @@
             
             function displayTestsOrdered() {
 
+            }
+            
+            function confirmAction(obj) {
+                accessionNum = obj.getAttribute("AccessionNum");
+                testOrdered = obj.getAttribute("TestOrdered");
+                jQuery('#myModal').modal('show');
+            }
+
+            function deleteOrder() {
+                console.log("AccessionNum = " + accessionNum + ' TestOrdered = ' + testOrdered);
+                jQuery.ajax({
+                    type: "POST",
+                    url: "/patients/delete_orders",
+                    data: "accessionNum=" + accessionNum + '&testOrdered=' + testOrdered,
+                    success: function (results) {
+                        console.log(results)
+                        window.location.reload();
+                    }
+                });
             }
         </script>
 
@@ -151,7 +172,7 @@
                 
                 <div id="lab_results">
                     <div style="overflow: auto; width: 100%; height: 450px;">
-                            <table style="border-spacing: 0" >
+                            <table style="border-spacing: 0; border-collapse: initial;" >
                                 <thead>
                                     <tr style="line-height: 3em;">
                                         <th style="max-width: 40px; text-align: center ">Accession Number</th>
@@ -168,8 +189,8 @@
                                         <td style="text-align: center; border-bottom: 1px solid black;"><%= testsOrdered[test].TestOrdered %></td>
                                         <td style="text-align: center; border-bottom: 1px solid black;"><%= testsOrdered[test].OrderDate %></td>
                                         <td style="text-align: center; border-bottom: 1px solid black;"><%= testsOrdered[test].OrderTime %></td>
-                                        <td><button onclick="confirmAction(this);" AccessionNum='<%= testsOrdered[test].AccessionNum %>' TestOrdered='<%= testsOrdered[test].TestOrdered %>'  style="width:98%;" class="btn btn-primary btn-large">Re-print</button></td>
-                                        <td><button onclick="" AccessionNum='<%= testsOrdered[test].AccessionNum %>' TestOrdered='<%= testsOrdered[test].TestOrdered %>'  style="width:98%;" class="btn btn-primary btn-large">Delete</button></td>
+                                        <td><button onclick="rePrintOrder(this);" AccessionNum='<%= testsOrdered[test].AccessionNum %>' TestOrdered='<%= testsOrdered[test].TestOrdered %>'  style="width:98%;" class="btn btn-primary btn-large">Re-print</button></td>
+                                        <td><button onclick="confirmAction(this);" AccessionNum='<%= testsOrdered[test].AccessionNum %>' TestOrdered='<%= testsOrdered[test].TestOrdered %>'  style="width:98%;" class="btn btn-primary btn-large">Delete</button></td>
                                     </tr>
                                     <% } %>
                                 </tbody>
