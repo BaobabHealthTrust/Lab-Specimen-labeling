@@ -52,14 +52,14 @@ router.get('/show/:identifier?', /*loadUser,*/ function (req, res, next) {
             ).then(function (testsOrdered) {
         array = []
 
-        for (var test in testsOrdered) {
+        /*for (var test in testsOrdered) {
             array.push([testsOrdered[test].AccessionNum, testsOrdered[test].TestOrdered, testsOrdered[test].OrderDate,
                 testsOrdered[test].OrderTime, testsOrdered[test].OrderedBy]
                     );
         }
 
         testsOrdered = arrayGroup(array, 4);
-        testsOrdered = JSON.stringify(testsOrdered)
+        testsOrdered = JSON.stringify(testsOrdered)*/
 
         res.render('show', {title: 'Patients Home Page', personAddress: personAddress,
             personAttributes: personAttributes, personNames: personNames,
