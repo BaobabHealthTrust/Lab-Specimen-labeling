@@ -162,6 +162,13 @@
             .close, .close:hover{
                 background: initial;
             }
+
+            hr {
+                border: none;
+                height: 2px;
+                color: #333; /* old IE */
+                background-color: #333; /* Modern Browsers */
+            }
         </style>
 
     </head>
@@ -241,9 +248,9 @@
         </div>
 
         <iframe id="printIframe" src="" style="display: none;"></iframe>
-        
+
         <script>
-            function loadIframe(){
+            function loadIframe() {
                 iframe = document.getElementById('printIframe');
                 iframe.src = '<%- printUrl %>';
             }
