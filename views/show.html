@@ -28,7 +28,7 @@
             function setAttributes() {
                 divBtn = document.getElementById('buttons');
                 divBtn.innerHTML += "<button onclick='newResults();' class='left button navButton' id='newResultsButton'><span>Order Tests</span></button>"
-                divBtn.innerHTML += "<button onclick='manageTestsOrdered()'class='left button navButton' id='vlResultsButton'><span>Manage Tests Ordered</span></button>"
+                //divBtn.innerHTML += "<button onclick='manageTestsOrdered()'class='left button navButton' id='vlResultsButton'><span>Manage Tests Ordered</span></button>"
             }
 
             function manageTestsOrdered() {
@@ -168,6 +168,10 @@
                 height: 2px;
                 color: #333; /* old IE */
                 background-color: #333; /* Modern Browsers */
+            }
+            
+            #newResultsButton{
+                float: left;
             }
         </style>
 
