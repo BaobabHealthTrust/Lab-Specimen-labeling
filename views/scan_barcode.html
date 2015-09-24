@@ -6,51 +6,53 @@
         <title></title>
         <script type="text/javascript">
             var tstUsername = "";
-                    tstCurrentDate = "2015-Sept-08";
+                    var tstCurrentDate = "2015-Sept-08";
                     var tt_cancel_destination = null;
                     var tstMessageBar;
                     var tstTimerHandle = null;
                     var tstTimerFunctionCall = "";
+                    
                     function logoutUser(){
                     window.location = '/users/logout';
                     }
 
             function informUser(){
-            < % if (patient_not_found == 'true') { % >
-                    showMessage("Patient not found. Scan again")
-                    < % } % >
+            <% if (patient_not_found == 'true') { %>
+                    showMessage("Patient not found. Scan again");
+            <% } %>
             }
 
             window.setTimeout("informUser();", 350);
-                    function showMessage(aMessage, withCancel, timed) {
-                    if (typeof (tstMessageBar) == "undefined"){
-                    __$("content").innerHTML += "<div id='messageBar' class='messageBar'></div>";
-                            tstMessageBar = __$('messageBar');
-                    }
+            
+            function showMessage(aMessage, withCancel, timed) {
+            if (typeof (tstMessageBar) == "undefined"){
+            __$("content").innerHTML += "<div id='messageBar' class='messageBar'></div>";
+                    tstMessageBar = __$('messageBar');
+            }
 
-                    var messageBar = tstMessageBar;
-                            messageBar.innerHTML = aMessage +
-                            "<br />" + (typeof (withCancel) != "undefined" ? (withCancel == true ?
-                                    "<button onmousedown='tstMessageBar.style.display = \"none\"; " +
-                                    "clearTimeout(tstTimerHandle);'><span>" + (typeof (tstLocaleWords) != "undefined" ?
-                                            (tstLocaleWords["cancel"] ? tstLocaleWords["cancel"] : "Cancel") : "Cancel") + "</span></button>" : "") : "") +
-                            "<button style='' onmousedown='tstMessageBar.style.display = \"none\"; " +
-                            "clearTimeout(tstTimerHandle); eval(tstTimerFunctionCall);'><span>" + (typeof (tstLocaleWords) != "undefined" ?
-                                    (tstLocaleWords["ok"] ? tstLocaleWords["ok"] : "OK") : "OK") + "</span></button>";
-                            if (aMessage.length > 0) {
-                    messageBar.style.display = 'block'
-                            if ((typeof (timed) == "undefined" ? true : timed) == true){
-                    window.setTimeout("hideMessage()", 3500)
-                    }
-                    }
-                    }
+            var messageBar = tstMessageBar;
+                    messageBar.innerHTML = aMessage +
+                    "<br />" + (typeof (withCancel) != "undefined" ? (withCancel == true ?
+                            "<button onmousedown='tstMessageBar.style.display = \"none\"; " +
+                            "clearTimeout(tstTimerHandle);'><span>" + (typeof (tstLocaleWords) != "undefined" ?
+                                    (tstLocaleWords["cancel"] ? tstLocaleWords["cancel"] : "Cancel") : "Cancel") + "</span></button>" : "") : "") +
+                    "<button style='' onmousedown='tstMessageBar.style.display = \"none\"; " +
+                    "clearTimeout(tstTimerHandle); eval(tstTimerFunctionCall);'><span>" + (typeof (tstLocaleWords) != "undefined" ?
+                            (tstLocaleWords["ok"] ? tstLocaleWords["ok"] : "OK") : "OK") + "</span></button>";
+                    if (aMessage.length > 0) {
+            messageBar.style.display = 'block'
+                    if ((typeof (timed) == "undefined" ? true : timed) == true){
+            window.setTimeout("hideMessage()", 3500)
+            }
+            }
+            }
 
             function hideMessage(){
-            tstMessageBar.style.display = 'none'
+                tstMessageBar.style.display = 'none'
             }
 
             function __$(elementID){
-            return document.getElementById(elementID);
+                return document.getElementById(elementID);
             }
         </script>
 
