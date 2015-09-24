@@ -209,7 +209,7 @@ router.post('/process_lab_results', function (request, response) {
                     //null, {method: 'insert'} forces knex to save a new record when PK is being tampered.
                     console.log('Record Successfully Saved');
                     //src="/patients/download_order?identifier=<%= patientIdentifier %>&accessionNum=<%= accessionNum %>&testOrdered=<%= testOrdered %>"
-                    url = "/patients/download_order?identifier=" + patientIdentifier + '&accessionNum=' + AccessionNum + '&testOrdered=' + testShortName;
+                    url = "/patients/download_order?identifier=" + patientIdentifier + '&accessionNum=' + AccessionNum + '&testOrdered=' + encodeURIComponent(testShortName);
                     request.session.print_url = url;
                     response.redirect("/patients/show/" + patientIdentifier);
                 })
