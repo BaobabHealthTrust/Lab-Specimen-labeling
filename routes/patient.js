@@ -16,7 +16,7 @@ router.get('/', function (req, res, next) {
     res.send('respond with a resource');
 });
 
-router.get('/scan_barcode', /*loadUser,*/ function (req, res, next) {
+router.get('/scan_barcode', loadUser, function (req, res, next) {
     //patient_not_found = req.session.patient_not_found;
     patient_not_found = req.session.patient_not_found;
     req.session.person = {};
@@ -24,7 +24,7 @@ router.get('/scan_barcode', /*loadUser,*/ function (req, res, next) {
     res.render('scan_barcode', {title: 'Scan Barcode', patient_not_found: patient_not_found});
 });
 
-router.get('/show/:identifier?', /*loadUser,*/ function (req, res, next) {
+router.get('/show/:identifier?', loadUser, function (req, res, next) {
 
     var person = req.session.person;
     if (isEmpty(person) === true) {
@@ -76,7 +76,7 @@ router.get('/show/:identifier?', /*loadUser,*/ function (req, res, next) {
 
 });
 
-router.get('/confirm/:identifier?', /*loadUser,*/ function (req, res, next) {
+router.get('/confirm/:identifier?', loadUser, function (req, res, next) {
     patientIdentifier = req.query.identifier;
     data = {person: {value: patientIdentifier}};
     var args = {
@@ -122,7 +122,7 @@ router.get('/confirm/:identifier?', /*loadUser,*/ function (req, res, next) {
     });
 })
 
-router.get('/new_lab_results/:identifier', /*loadUser,*/ function (req, res, next) {
+router.get('/new_lab_results/:identifier', loadUser, function (req, res, next) {
     //monthNames = ['', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
     today = new Date();
     thisMonth = today.getMonth() + 1;
@@ -174,7 +174,7 @@ router.get('/new_lab_results/:identifier', /*loadUser,*/ function (req, res, nex
      });*/
 });
 
-router.post('/process_lab_results', function (request, response) {
+router.post('/process_lab_results', loadUser, function (request, response) {
     var labResult = request.body.lab_result;
     var patientIdentifier = request.body.patient_identifier;
     var userId = request.session.session_user_id;
@@ -219,7 +219,7 @@ router.post('/process_lab_results', function (request, response) {
     });
 })
 
-router.post('/delete_orders', function (request, response) {
+router.post('/delete_orders', loadUser, function (request, response) {
     AccessionNum = request.body.accessionNum;
     TestOrdered = request.body.testOrdered;
     LabTestTable = model.LabTestTable;
@@ -240,7 +240,7 @@ router.post('/delete_orders', function (request, response) {
             });
 })
 
-router.get('/manage_orders/:identifier', /*loadUser,*/ function (req, res, next) {
+router.get('/manage_orders/:identifier', loadUser, function (req, res, next) {
     patientIdentifier = req.params.identifier;
     knex('LabTestTable').where({Pat_ID: patientIdentifier}).select(
             'AccessionNum', 'TestOrdered', 'OrderDate', 'OrderTime', 'OrderedBy'
@@ -250,14 +250,14 @@ router.get('/manage_orders/:identifier', /*loadUser,*/ function (req, res, next)
     });
 });
 
-router.get('/print_orders/:identifier?', /*loadUser,*/ function (req, res, next) {
+router.get('/print_orders/:identifier?', loadUser, function (req, res, next) {
     patientIdentifier = req.query.identifier;
     testOrdered = req.query.testOrdered;
     accessionNum = req.query.accessionNum;
     res.render('print_orders', {title: 'Print Order', accessionNum: accessionNum, testOrdered: testOrdered, patientIdentifier: patientIdentifier});
 });
 
-router.get('/download_order/:identifier?', /*loadUser,*/ function (req, res, next) {
+router.get('/download_order/:identifier?', loadUser, function (req, res, next) {
     patientIdentifier = req.query.identifier;
     testName = req.query.testOrdered;
     accessionNum = req.query.accessionNum;
