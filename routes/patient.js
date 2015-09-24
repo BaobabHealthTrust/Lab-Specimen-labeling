@@ -138,6 +138,10 @@ router.get('/new_lab_results/:identifier', /*loadUser,*/ function (req, res, nex
         labTests = models.toJSON();
         labTestsProcessed = [];
         for (var i = 0; i <= labTests.length - 1; i++) {
+            //We need to skip all records with panel_ID = 0 coz they don't have associated records
+            Panel_ID = labTests[i].Panel_ID;
+            if (parseInt(Panel_ID) === 0)
+                continue;
             value = labTests[i].TestName;
             key = value.replace(/_/g, " ");
             labTestsProcessed.push([key, value]);
