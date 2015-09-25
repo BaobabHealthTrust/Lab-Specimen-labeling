@@ -208,7 +208,7 @@
                                     <td style="text-align: center; border-bottom: 1px solid black;"><%= testsOrdered[test].TestOrdered %></td>
                                     <td style="text-align: center; border-bottom: 1px solid black;"><%= testsOrdered[test].OrderDate %></td>
                                     <td style="text-align: center; border-bottom: 1px solid black;"><%= testsOrdered[test].OrderTime %></td>
-                                    <td><button onclick="rePrintOrder(this);" AccessionNum='<%= testsOrdered[test].AccessionNum %>' TestOrdered='<%= testsOrdered[test].TestOrdered %>'  style="width:98%;" class="btn btn-primary btn-large">Re-print</button></td>
+                                    <td><button onclick="rePrintOrder(this);" AccessionNum='<%= testsOrdered[test].AccessionNum %>' TestOrdered='<%= encodeURIComponent(testsOrdered[test].TestOrdered) %>'  style="width:98%;" class="btn btn-primary btn-large">Re-print</button></td>
                                     <!--<td><button onclick="confirmAction(this);" AccessionNum='<%= testsOrdered[test].AccessionNum %>' TestOrdered='<%= testsOrdered[test].TestOrdered %>'  style="width:98%;" class="btn btn-primary btn-large">Delete</button></td>-->
                                 </tr>
                                 <% } %>
