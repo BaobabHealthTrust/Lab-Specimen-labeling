@@ -3,5 +3,6 @@
 *~
 nbproject
 db/bookshelf.js
+bart_config.js
 public/touchscreentoolkit/*
 *.log
