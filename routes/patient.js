@@ -201,6 +201,7 @@ router.post('/process_lab_results', loadUser, function (request, response) {
     knex.table('LabTestTable').max('AccessionNum as AccessionNum').then(function (maxValue) {
         AccessionNum = maxValue[0]["AccessionNum"];
         data = [];
+        accession_test = {}
         for (var i = 0; i <= selected_tests.length - 1; i++) {
             if (selected_tests[i].length > 0) {
                 AccessionNum = AccessionNum + 1;
@@ -208,7 +209,7 @@ router.post('/process_lab_results', loadUser, function (request, response) {
                 if (!short_name) {
                     short_name = selected_tests[i];
                 }
-                
+                accession_test[AccessionNum] = short_name;
                 data.push({
                     AccessionNum: AccessionNum,
                     TestOrdered: short_name,
@@ -221,11 +222,12 @@ router.post('/process_lab_results', loadUser, function (request, response) {
             }
         }
 
-        knex.insert(data).into("LabTestTable").then(function (id) {
-            console.log('Successful');
+        knex.insert(data).into("LabTestTable").then(function (acc_num) {
+            testShortName = accession_test[acc_num];
+            url = "/patients/download_order?identifier=" + patientIdentifier + '&accessionNum=' + acc_num + '&testOrdered=' + encodeURIComponent(testShortName);
+            request.session.print_url = url;
+            response.redirect("/patients/show/" + patientIdentifier);
         })
-
-
     })
     /*knex.table('LabTestTable').max('AccessionNum as AccessionNum').then(function (maxValue) {
      
