@@ -6,6 +6,7 @@ var loadUser = require('../force_login');
 var Client = require('node-rest-client').Client;
 client = new Client();
 var bartConfig = require('../bart_config');
+var tests = require('../tests');
 var bartHost = bartConfig.host;
 var bartPort = bartConfig.port;
 var facilityName = bartConfig.facilityName;
@@ -131,41 +132,45 @@ router.get('/new_lab_results/:identifier', loadUser, function (req, res, next) {
     }
     formattedDate = today.getFullYear() + '-' + thisMonth + '-' + today.getDate();
     patientIdentifier = req.params.identifier;
-    LabTestType = model.LabTestType;
 
-    optionsForSelect = '<option value=""></option>\n';
-    new LabTestType().fetchAll().then(function (models) {
-        labTests = models.toJSON();
-        labTestsProcessed = [];
-        for (var i = 0; i <= labTests.length - 1; i++) {
-            //We need to skip all records with panel_ID = 0 coz they don't have associated records
-            Panel_ID = labTests[i].Panel_ID;
-            if (parseInt(Panel_ID) === 0)
-                continue;
-            value = labTests[i].TestName;
-            key = value.replace(/_/g, " ");
-            labTestsProcessed.push([key, value]);
-        }
+    res.render('new_lab_results', {title: 'New Lab Results', today: formattedDate,
+        patientIdentifier: patientIdentifier, tests: tests});
 
-        labTestsProcessed.sort(function (a, b) {
-            var valueA = a[0].toLowerCase(), valueB = b[0].toLowerCase();
-            if (valueA < valueB) //sort string ascending
-                return -1;
-            if (valueA > valueB)
-                return 1;
-            return 0 //default return value (no sorting)
-        });
-
-        for (var i = 0; i <= labTestsProcessed.length - 1; i++) {
-            key = labTestsProcessed[i][0];
-            value = labTestsProcessed[i][1];
-            optionsForSelect += '<option value="' + value + '">' + key + '</option>\n';
-        }
-
-        res.render('new_lab_results', {title: 'New Lab Results', today: formattedDate,
-            patientIdentifier: patientIdentifier, labTests: JSON.stringify(labTestsProcessed),
-            optionsForSelect: optionsForSelect});
-    })
+    /*LabTestType = model.LabTestType;
+     
+     optionsForSelect = '<option value=""></option>\n';
+     new LabTestType().fetchAll().then(function (models) {
+     labTests = models.toJSON();
+     labTestsProcessed = [];
+     for (var i = 0; i <= labTests.length - 1; i++) {
+     //We need to skip all records with panel_ID = 0 coz they don't have associated records
+     Panel_ID = labTests[i].Panel_ID;
+     if (parseInt(Panel_ID) === 0)
+     continue;
+     value = labTests[i].TestName;
+     key = value.replace(/_/g, " ");
+     labTestsProcessed.push([key, value]);
+     }
+     
+     labTestsProcessed.sort(function (a, b) {
+     var valueA = a[0].toLowerCase(), valueB = b[0].toLowerCase();
+     if (valueA < valueB) //sort string ascending
+     return -1;
+     if (valueA > valueB)
+     return 1;
+     return 0 //default return value (no sorting)
+     });
+     
+     for (var i = 0; i <= labTestsProcessed.length - 1; i++) {
+     key = labTestsProcessed[i][0];
+     value = labTestsProcessed[i][1];
+     optionsForSelect += '<option value="' + value + '">' + key + '</option>\n';
+     }
+     
+     res.render('new_lab_results', {title: 'New Lab Results', today: formattedDate,
+     patientIdentifier: patientIdentifier, labTests: JSON.stringify(labTestsProcessed),
+     optionsForSelect: optionsForSelect});
+     })*/
     //console.log(model.LabParameter)
     /*new Lab({rec_id: 26})
      .fetch()
@@ -191,32 +196,66 @@ router.post('/process_lab_results', loadUser, function (request, response) {
     LabSample = model.LabSample;
     LabParameter = model.LabParameter;
 
+    selected_tests = request.body["lab_orders[]"];
+
     knex.table('LabTestTable').max('AccessionNum as AccessionNum').then(function (maxValue) {
-        AccessionNum = maxValue[0]["AccessionNum"] + 1;
-        new LabTestType({TestName: labResult}).fetch().then(function (lab_test_type) {
-            Panel_ID = lab_test_type.get('Panel_ID');
-            new LabPanel({rec_id: Panel_ID}).fetch().then(function (lab_panel) {
-                testShortName = lab_panel.get('short_name');
-                new LabTestTable({
+        AccessionNum = maxValue[0]["AccessionNum"];
+        data = [];
+        for (var i = 0; i <= selected_tests.length - 1; i++) {
+            if (selected_tests[i].length > 0) {
+                AccessionNum = AccessionNum + 1;
+                short_name = tests["short_names"][selected_tests[i]];
+                if (!short_name) {
+                    short_name = selected_tests[i];
+                }
+                
+                data.push({
                     AccessionNum: AccessionNum,
-                    TestOrdered: testShortName,
+                    TestOrdered: short_name,
                     Pat_ID: patientIdentifier,
                     OrderDate: today,
                     OrderTime: orderTime,
                     OrderedBy: userId,
                     Location: facilityName
-                }).save(null, {method: 'insert'}).then(function (lab_test_table) {
-                    //null, {method: 'insert'} forces knex to save a new record when PK is being tampered.
-                    console.log('Record Successfully Saved');
-                    //src="/patients/download_order?identifier=<%= patientIdentifier %>&accessionNum=<%= accessionNum %>&testOrdered=<%= testOrdered %>"
-                    url = "/patients/download_order?identifier=" + patientIdentifier + '&accessionNum=' + AccessionNum + '&testOrdered=' + encodeURIComponent(testShortName);
-                    request.session.print_url = url;
-                    response.redirect("/patients/show/" + patientIdentifier);
-                })
-                        ;
-            });
-        });
-    });
+                });
+            }
+        }
+
+        knex.insert(data).into("LabTestTable").then(function (id) {
+            console.log('Successful');
+        })
+
+
+    })
+    /*knex.table('LabTestTable').max('AccessionNum as AccessionNum').then(function (maxValue) {
+     
+     })*/
+    /*knex.table('LabTestTable').max('AccessionNum as AccessionNum').then(function (maxValue) {
+     AccessionNum = maxValue[0]["AccessionNum"] + 1;
+     new LabTestType({TestName: labResult}).fetch().then(function (lab_test_type) {
+     Panel_ID = lab_test_type.get('Panel_ID');
+     new LabPanel({rec_id: Panel_ID}).fetch().then(function (lab_panel) {
+     testShortName = lab_panel.get('short_name');
+     new LabTestTable({
+     AccessionNum: AccessionNum,
+     TestOrdered: testShortName,
+     Pat_ID: patientIdentifier,
+     OrderDate: today,
+     OrderTime: orderTime,
+     OrderedBy: userId,
+     Location: facilityName
+     }).save(null, {method: 'insert'}).then(function (lab_test_table) {
+     //null, {method: 'insert'} forces knex to save a new record when PK is being tampered.
+     console.log('Record Successfully Saved');
+     //src="/patients/download_order?identifier=<%= patientIdentifier %>&accessionNum=<%= accessionNum %>&testOrdered=<%= testOrdered %>"
+     url = "/patients/download_order?identifier=" + patientIdentifier + '&accessionNum=' + AccessionNum + '&testOrdered=' + encodeURIComponent(testShortName);
+     request.session.print_url = url;
+     response.redirect("/patients/show/" + patientIdentifier);
+     })
+     ;
+     });
+     });
+     });*/
 })
 
 router.post('/delete_orders', loadUser, function (request, response) {

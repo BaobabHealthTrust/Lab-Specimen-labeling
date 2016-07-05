@@ -2,8 +2,7 @@
 <script>
     var tt_cancel_destination = "/patients/show?identifier=<%= patientIdentifier %>"
     var tstCurrentDate = "<%= today %>";
-    var labTests = JSON.parse('<%- labTests %>');
-    
+
     function updateResultKeyPad() {
         curr_page = tstCurrentPage - 1;
         buttons = document.getElementsByClassName("keyboardButton");
@@ -55,8 +54,8 @@
         today.className = 'blue';
     }
 
-    function addOptions(){
-        
+    function addOptions() {
+
     }
 </script>
 <style>
@@ -77,10 +76,57 @@
     <div id="container">
         <div id="content">
             <form id='lab_form' action="/patients/process_lab_results" method='post'>
-                <select helpText="Available tests" id="value" name="lab_result">
-                    <%- optionsForSelect %>
-                </select>
                 <input id="patient_identifier" name="patient_identifier" type="hidden" value="<%= patientIdentifier %>" />
+
+
+                <select id="multiple" class="multi" name="lab_orders[]" helptext="Select Lab orders" multiple="multiple" nested="true">
+                    <option></option>
+
+                    <optgroup id="blood_test" label="Blood Tests">
+                        <% for (var i=0; i<=tests["blood"].length - 1; i++){ %>
+                        <option id="<%= tests['blood'][i] %>" value="<%= tests['blood'][i] %>"><%= tests['blood'][i] %></option>
+                        <% } %>
+                    </optgroup>
+
+                    <optgroup id="csf_test" label="CSF">
+                        <% for (var i=0; i<=tests["csf"].length - 1; i++){ %>
+                        <option id="<%= tests['csf'][i] %>" value="<%= tests['csf'][i] %>"><%= tests['csf'][i] %></option>
+                        <% } %>
+                    </optgroup>
+
+                    <optgroup id="urine_test" label="Urine">
+                        <% for (var i=0; i<=tests["urine"].length - 1; i++){ %>
+                        <option id="<%= tests['urine'][i] %>" value="<%= tests['urine'][i] %>"><%= tests['urine'][i] %></option>
+                        <% } %>
+                    </optgroup>
+
+                    <optgroup id="aspirate_test" label="Aspirate">
+                        <% for (var i=0; i<=tests["aspirate"].length - 1; i++){ %>
+                        <option id="<%= tests['aspirate'][i] %>" value="<%= tests['aspirate'][i] %>"><%= tests['aspirate'][i] %></option>
+                        <% } %>
+                    </optgroup>
+
+                    <optgroup id="sputum" label="Sputum">
+                        <% for (var i=0; i<=tests["sputum"].length - 1; i++){ %>
+                        <option id="<%= tests['sputum'][i] %>" value="<%= tests['sputum'][i] %>"><%= tests['sputum'][i] %></option>
+                        <% } %>
+                    </optgroup>
+
+                    <optgroup id="stool" label="Stool">
+                        <% for (var i=0; i<=tests["stool"].length - 1; i++){ %>
+                        <option id="<%= tests['stool'][i] %>" value="<%= tests['stool'][i] %>"><%= tests['stool'][i] %></option>
+                        <% } %>
+                    </optgroup>
+
+                    <optgroup id="Swab" label="Swab">
+                        <% for (var i=0; i<=tests["swab"].length - 1; i++){ %>
+                        <option id="<%= tests['swab'][i] %>" value="<%= tests['swab'][i] %>"><%= tests['swab'][i] %></option>
+                        <% } %>
+                    </optgroup>
+
+                </select>
+
+
             </form>
         </div>
     </div>
