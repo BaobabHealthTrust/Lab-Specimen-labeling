@@ -110,11 +110,16 @@ router.get('/confirm/:identifier?', loadUser, function (req, res, next) {
             age = getAge(birthdate);
             req.session.person = person;
 
-            res.render('confirm', {title: 'Confirmation Page', personAddress: personAddress,
-                personAttributes: personAttributes, personNames: personNames,
-                patientIdentifiers: patientIdentifiers, gender: gender, birthDay: birthDay,
-                birthMonth: birthMonth, birthYear: birthYear, age: age
-            });
+            knex('LabTestTable').where({Pat_ID: patientIdentifiers['National id']}).limit(10).orderBy('OrderDate', 'desc').select(
+                    'AccessionNum', 'TestOrdered', 'OrderDate', 'OrderTime', 'OrderedBy'
+                    ).then(function (testsOrdered) {
+                        console.log(testsOrdered);
+                res.render('confirm', {title: 'Confirmation Page', personAddress: personAddress,
+                    personAttributes: personAttributes, personNames: personNames,
+                    patientIdentifiers: patientIdentifiers, gender: gender, birthDay: birthDay,
+                    birthMonth: birthMonth, birthYear: birthYear, age: age, testsOrdered: testsOrdered
+                });
+            })
         }
     }).on('error', function (err) {
         console.log('Error')

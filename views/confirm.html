@@ -61,7 +61,8 @@
 
         <link rel="stylesheet" type="text/css" href="/stylesheets/touch-fancy.css"/>
         <link rel="stylesheet" type="text/css" href="/stylesheets/dashboard.css"/>
-
+        <link rel="stylesheet" type="text/css" href="/stylesheets/bootstrap.css"/>
+        <link rel="stylesheet" type="text/css" href="/stylesheets/bootstrap-responsive.css"/>
         <style type="text/css">
             #barcode {
                 background:transparent none repeat scroll 0 0;
@@ -98,121 +99,109 @@
                 z-index: 999;
             }
 
-            body {
-                -moz-user-select:none;
-            }
 
-            table {
-                vertical-align:center;
-                width: 80%;
-                -moz-user-select:none;
-                padding-left: 20%;
-                padding-top: 3%;
-            }
-
-            .container {
-                height: 92%;
-                background-color: #FFFFDD;
-                margin: 20px 20px 20px 20px;
-                overflow: auto;
-            }
-
-            .data { 
-                padding-left: 5px;
-            }
-
-            td {
-                text-align: left;
-                border-style: solid;
-                border-width: 1px;
-                text-align: left;
-                word-wrap: break-word;
-            }
-
-            th {
-                text-align: left;
-                border-style: solid;
-                border-width: 1px;
-                padding-left: 5px;
-                text-align: left;
-            }
-
-            a {
-                background-color: grey;
-                border-bottom: 1px outset #EEEEEE;
-                border-style: outset;
-                border-top: 1px outset #EEEEEE;
-                color: white;
-                display: block;
-                padding: 10px 16px 10px 10px;
-                text-align: center;
-                text-decoration: none;
-            }
-            
-            #continue{
-                float: right;
-            }
-            
-            .header_td{
-                text-align: center;
-                line-height: 7px;
+            button{
+                font-size: 16pt;
+                font-weight: bold;
+                
             }
         </style>
+
+
+
 
     </head>
     <body id="mateme">  
         <div id="container">      
             <div id="content" style = "position : relative; width : 98%; margin-left : -49%;">
-                <table>
-                    <tr>
-                        <td colspan='2' class='header_td'><h3>PATIENT CONFIRMATION</h3></td>
-                    </tr>
-                    <tr>
-                        <th>National ID</th>
-                        <td class='anchor_class'><a href="#"><%= patientIdentifiers["National id"] %></a></td>
-                    </tr>
-                    <tr>
-                        <th>First Name</th>
-                        <td class='anchor_class'><a href="#"><%= personNames["given_name"] %></a></td>
-                    </tr>
-                    <tr>
-                        <th>Last Name</th>
-                        <td class='anchor_class'><a href="#"><%= personNames["family_name"] %></a></td>
-                    </tr>
-                    <tr>
-                        <th>Age</th>
-                        <td class='anchor_class'><a href="#"><%= age %> </a></td>
-                    </tr>
-                    <tr>
-                        <th>Gender</th>
-                        <td class='anchor_class'><a href="#"><%= gender %></a></td>
-                    </tr>
-                    <tr>
-                        <th>Current Residence</th>
-                        <td class='anchor_class'><a href="#"><%= personAddress["city_village"] %></a></td>
-                    </tr>
-                    <tr>
-                        <th>Current Traditional Authority</th>
-                        <td class='title'><a href="#"><%= personAddress["county_district"] %></a></td>
-                    </tr>
+                <br /><br />
+                <div class="row-fluid" style='margin-left: 5%;'>
+                    <div class="span7">
+                        <!-- block -->
+                        <div class="block">
+                            <div class="navbar navbar-inner block-header" style='padding-top: 16px;'>
+                                <div class="muted pull-right">
+                                    <span style='font-weight: bolder;'>PATIENT CONFIRMATION</span>
+                                </div>
+                            </div>
+                            <div class="block-content collapse in">
+                                <table class="table table-striped">
+                                    <tbody>
+                                        <tr>
+                                            <th>National ID</th>
+                                            <td class='anchor_class'><a href="#"><%= patientIdentifiers["National id"] %></a></td>
+                                        </tr>
+                                        <tr>
+                                            <th>First Name</th>
+                                            <td class='anchor_class'><a href="#"><%= personNames["given_name"] %></a></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Last Name</th>
+                                            <td class='anchor_class'><a href="#"><%= personNames["family_name"] %></a></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Age</th>
+                                            <td class='anchor_class'><a href="#"><%= age %> </a></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Gender</th>
+                                            <td class='anchor_class'><a href="#"><%= gender %></a></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Current Residence</th>
+                                            <td class='anchor_class'><a href="#"><%= personAddress["city_village"] %></a></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Current Traditional Authority</th>
+                                            <td class='title'><a href="#"><%= personAddress["county_district"] %></a></td>
+                                        </tr>
 
-                    <tr> 
-                        <th>Home District</th>
-                        <td class='anchor_class'><a href="#"><%= personAddress["state_province"] %></a></td> 
-                    </tr>
-                    <tr> 
-                        <th>Cell Phone #</th>
-                        <td class='anchor_class'> <a href="#"><%= personAttributes["cell_phone_number"] %></a></td> 
-                    </tr>
-                    <tr> 
-                        <th>Home Phone #</th>
-                        <td class='anchor_class'><a href="#"><%= personAttributes["home_phone_number"] %></a></td> 
-                    </tr>
-                    <tr>
-                        <th>Occupation</th>
-                        <td class='anchor_class'><a href="#"><%= personAttributes["occupation"] %></a></td>
-                    </tr>
-                </table>
+                                        <tr> 
+                                            <th>Home District</th>
+                                            <td class='anchor_class'><a href="#"><%= personAddress["state_province"] %></a></td> 
+                                        </tr>
+                                        <tr> 
+                                            <th>Cell Phone #</th>
+                                            <td class='anchor_class'> <a href="#"><%= personAttributes["cell_phone_number"] %></a></td> 
+                                        </tr>
+                                        <tr> 
+                                            <th>Home Phone #</th>
+                                            <td class='anchor_class'><a href="#"><%= personAttributes["home_phone_number"] %></a></td> 
+                                        </tr>
+                                        <tr>
+                                            <th>Occupation</th>
+                                            <td class='anchor_class'><a href="#"><%= personAttributes["occupation"] %></a></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <!-- /block -->
+                    </div>
+
+                    <div class="span4">
+                        <!-- block -->
+                        <div class="block">
+                            <div class="navbar navbar-inner block-header" style='padding-top: 16px;'>
+                                <div class="muted pull-right">
+                                    <span style='font-weight: bolder;'>PATIENT 10 LATEST SAMPLES</span>
+                                </div>
+                            </div>
+                            <div class="block-content collapse in">
+                                <table class="table">
+                                    <tbody>
+                                        <% for (var test in testsOrdered){ %>
+                                        <tr>
+                                            <td><a><span class='pull-right'><%= testsOrdered[test].TestOrdered + ' (' +  testsOrdered[test].OrderDate + ')' %></span></a></td>
+                                        </tr>
+                                        <% } %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <!-- /block -->
+                    </div>
+                </div>
 
                 <div id="footer" class="dark">
                     <div id="buttons" class="buttons" style="top:0px">

@@ -1,0 +1,8 @@
+bartConfig = {
+    host     : 'localhost',
+    port     : 3000,
+    facilityName: 'MPC'
+}
+
+module.exports = bartConfig;
+
