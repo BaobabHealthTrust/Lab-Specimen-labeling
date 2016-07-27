@@ -309,7 +309,7 @@ router.get('/download_order/:identifier?', loadUser, function (req, res, next) {
     accessionNum = req.query.accessionNum;
     person = req.session.person;
     personNames = person["person"]["names"];
-    name = personNames["given_name"] + ' ' + personNames["family_name"] + ' ' + patientIdentifier;
+    name = personNames["given_name"] + ' ' + personNames["family_name"] + ' (' + patientIdentifier + ')';
 
     knex('LabTestTable').where({Pat_ID: patientIdentifier, AccessionNum: accessionNum, TestOrdered: testName}).select(
             'AccessionNum', 'TestOrdered', 'OrderDate', 'OrderTime', 'OrderedBy'
@@ -326,11 +326,12 @@ router.get('/download_order/:identifier?', loadUser, function (req, res, next) {
                 "q500\n" +
                 "Q165,026\n" +
                 "ZT\n" +
-                "B50,105,0,1,4,8,50,N,\"" + accessionNum + "\"\n" +
+                "B50,107,0,1,4,8,50,N,\"" + accessionNum + "\"\n" +
                 "A35,30,0,2,1,1,N,\"" + name + "\"\n" +
-                "A35,56,0,2,1,1,N,\"" + testName + "\"\n" +
-                "A35,82,0,2,1,1,N,\"" + dateTimeOrdered + "\"\n" +
-                "P2"
+                "A35,50,0,2,1,1,N,\"Acc #: " + accessionNum + "\"\n" +
+                "A35,70,0,2,1,1,N,\"Order: " + testName + "\"\n" +
+                "A35,90,0,2,1,1,N,\"" + dateTimeOrdered + "\"\n" +
+                "P3"
 
         fs.writeFile(fileName, data, function (err) {
             var path = require('path');
