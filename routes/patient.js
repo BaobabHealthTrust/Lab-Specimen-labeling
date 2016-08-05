@@ -309,7 +309,9 @@ router.get('/download_order/:identifier?', loadUser, function (req, res, next) {
     accessionNum = req.query.accessionNum;
     person = req.session.person;
     personNames = person["person"]["names"];
-    name = personNames["given_name"] + ' ' + personNames["family_name"] + ' (' + patientIdentifier + ')';
+    gender = person["person"]["gender"];
+    
+    name = personNames["given_name"] + ' ' + personNames["family_name"] + ' (' + patientIdentifier + ')(' + gender + ')';
 
     knex('LabTestTable').where({Pat_ID: patientIdentifier, AccessionNum: accessionNum, TestOrdered: testName}).select(
             'AccessionNum', 'TestOrdered', 'OrderDate', 'OrderTime', 'OrderedBy'

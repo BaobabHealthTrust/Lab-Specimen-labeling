@@ -169,7 +169,7 @@
                 color: #333; /* old IE */
                 background-color: #333; /* Modern Browsers */
             }
-            
+
             #newResultsButton{
                 float: left;
             }
@@ -254,11 +254,18 @@
         <iframe id="printIframe" src="" style="display: none;"></iframe>
 
         <script>
-            function loadIframe() {
+
+            /*function loadIframe() {
+             iframe = document.getElementById('printIframe');
+             iframe.src = '<%- printUrl %>';
+             }
+             window.setTimeout("loadIframe();", 350);*/
+
+            window.onload = function () {
                 iframe = document.getElementById('printIframe');
                 iframe.src = '<%- printUrl %>';
-            }
-            window.setTimeout("loadIframe();", 350);
+            } //Run this when the window has loaded successfully
+
         </script>
     </body>
 </html>
