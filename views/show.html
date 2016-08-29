@@ -176,7 +176,7 @@
         </style>
 
     </head>
-    <body id="mateme" onload="setTimeout('setAttributes();', 100);">
+    <body id="mateme">
         <div id="container">
             <div id="content">
                 <div id = 'headdiv'>
@@ -262,6 +262,8 @@
              window.setTimeout("loadIframe();", 350);*/
 
             window.onload = function () {
+                setAttributes();
+                
                 iframe = document.getElementById('printIframe');
                 iframe.src = '<%- printUrl %>';
             } //Run this when the window has loaded successfully
