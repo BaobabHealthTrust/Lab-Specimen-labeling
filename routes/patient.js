@@ -333,7 +333,7 @@ router.get('/download_order/:identifier?', loadUser, function (req, res, next) {
                 "A35,70,0,2,1,1,N,\"Acc no  " + accessionNum + "\"\n" +
                 "A35,90,0,2,1,1,N,\"Order " + testName + "\"\n" +
                 "A35,110,0,2,1,1,N,\"" + dateTimeOrdered + "\"\n" +
-                "P3"
+                "P3\n\n"
 
         fs.writeFile(fileName, data, function (err) {
             var path = require('path');
