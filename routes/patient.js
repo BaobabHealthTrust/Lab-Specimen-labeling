@@ -227,8 +227,10 @@ router.post('/process_lab_results', loadUser, function (request, response) {
             }
         }
 
-        knex.insert(data).into("LabTestTable").then(function (acc_num) {
-            testShortName = accession_test[acc_num];
+        knex.insert(data).into("LabTestTable").returning('AccessionNum').then(function (acc_num) {
+            acc_num = Object.keys(accession_test)[Object.keys(accession_test).length - 1];
+            testShortName = accession_test[acc_num] //Last Test
+
             url = "/patients/download_order?identifier=" + patientIdentifier + '&accessionNum=' + acc_num + '&testOrdered=' + encodeURIComponent(testShortName);
             request.session.print_url = url;
             response.redirect("/patients/show/" + patientIdentifier);
@@ -312,10 +314,10 @@ router.get('/download_order/:identifier?', loadUser, function (req, res, next) {
     gender = person["person"]["gender"];
     
     name = personNames["given_name"] + ' ' + personNames["family_name"] + ' (' + patientIdentifier + ')(' + gender + ')';
-
     knex('LabTestTable').where({Pat_ID: patientIdentifier, AccessionNum: accessionNum, TestOrdered: testName}).select(
             'AccessionNum', 'TestOrdered', 'OrderDate', 'OrderTime', 'OrderedBy'
             ).then(function (testOrdered) {
+                console.log(testOrdered[0]);
         orderDate = testOrdered[0].OrderDate;
         orderTime = testOrdered[0].OrderTime;
         months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
