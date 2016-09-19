@@ -63,16 +63,25 @@ router.get('/show/:identifier?', loadUser, function (req, res, next) {
          testsOrdered = JSON.stringify(testsOrdered)*/
 
         var print_url = '';
+        var multiple_print_urls;
+
         if (req.session.print_url) {
             print_url = req.session.print_url;
             req.session.print_url = null;
+        }
+        //multiple_print_urls
+        if (req.session.multiple_print_urls) {
+            multiple_print_urls = req.session.multiple_print_urls;
+            req.session.multiple_print_urls = null;
         }
 
         res.render('show', {title: 'Patients Home Page', personAddress: personAddress,
             personAttributes: personAttributes, personNames: personNames,
             patientIdentifiers: patientIdentifiers, gender: gender, birthDay: birthDay,
-            birthMonth: birthMonth, birthYear: birthYear, age: age, testsOrdered: testsOrdered, printUrl: print_url
+            birthMonth: birthMonth, birthYear: birthYear, age: age, testsOrdered: testsOrdered,
+            printUrl: print_url, multiplePrintUrls: multiple_print_urls
         });
+
     });
 
 });
@@ -113,7 +122,6 @@ router.get('/confirm/:identifier?', loadUser, function (req, res, next) {
             knex('LabTestTable').where({Pat_ID: patientIdentifiers['National id']}).limit(10).orderBy('OrderDate', 'desc').select(
                     'AccessionNum', 'TestOrdered', 'OrderDate', 'OrderTime', 'OrderedBy'
                     ).then(function (testsOrdered) {
-                        console.log(testsOrdered);
                 res.render('confirm', {title: 'Confirmation Page', personAddress: personAddress,
                     personAttributes: personAttributes, personNames: personNames,
                     patientIdentifiers: patientIdentifiers, gender: gender, birthDay: birthDay,
@@ -207,6 +215,7 @@ router.post('/process_lab_results', loadUser, function (request, response) {
         AccessionNum = maxValue[0]["AccessionNum"];
         data = [];
         accession_test = {}
+        multiple_print_urls = [];
         for (var i = 0; i <= selected_tests.length - 1; i++) {
             if (selected_tests[i].length > 0) {
                 AccessionNum = AccessionNum + 1;
@@ -224,6 +233,9 @@ router.post('/process_lab_results', loadUser, function (request, response) {
                     OrderedBy: userId,
                     Location: facilityName
                 });
+
+                print_url = "/patients/download_order?identifier=" + patientIdentifier + '&accessionNum=' + AccessionNum + '&testOrdered=' + encodeURIComponent(short_name);
+                multiple_print_urls.push(print_url);
             }
         }
 
@@ -233,6 +245,7 @@ router.post('/process_lab_results', loadUser, function (request, response) {
 
             url = "/patients/download_order?identifier=" + patientIdentifier + '&accessionNum=' + acc_num + '&testOrdered=' + encodeURIComponent(testShortName);
             request.session.print_url = url;
+            request.session.multiple_print_urls = multiple_print_urls;
             response.redirect("/patients/show/" + patientIdentifier);
         })
     })
@@ -312,12 +325,12 @@ router.get('/download_order/:identifier?', loadUser, function (req, res, next) {
     person = req.session.person;
     personNames = person["person"]["names"];
     gender = person["person"]["gender"];
-    
+
     name = personNames["given_name"] + ' ' + personNames["family_name"] + ' (' + patientIdentifier + ')(' + gender + ')';
     knex('LabTestTable').where({Pat_ID: patientIdentifier, AccessionNum: accessionNum, TestOrdered: testName}).select(
             'AccessionNum', 'TestOrdered', 'OrderDate', 'OrderTime', 'OrderedBy'
             ).then(function (testOrdered) {
-                console.log(testOrdered[0]);
+
         orderDate = testOrdered[0].OrderDate;
         orderTime = testOrdered[0].OrderTime;
         months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
