@@ -269,15 +269,34 @@
                 //iframe.src = '<%- printUrl %>';
 
                 multiplePrintUrls = multiplePrintUrls.split(',');
-                body = jQuery('body')[0];
+                timer = 5000;
+
                 for (var i = 0; i <= multiplePrintUrls.length - 1; i++) {
+                   
                     src = multiplePrintUrls[i];
-                    iframe = document.createElement('iframe');
-                    iframe.src = src;
-                    body.appendChild(iframe);
+                    setTimeout(function () {
+                         timer += 5000;
+                        createiFrame(src, timer)
+                    }, timer);
+
                 }
+
             } //Run this when the window has loaded successfully
 
+            /*
+             * ar iframe = document.getElementById('myIframe'),src = iframe.src;
+             iframe.src = '';
+             document.onload =  function(){iframe.src = src;}
+             setTimeout(function(){ alert("Hello"); }, 3000);  //after 3 seconds
+             */
+
+            function createiFrame(src, timer) {
+                console.log(timer)
+                body = jQuery('body')[0];
+                iframe = document.createElement('iframe');
+                iframe.src = src;
+                body.appendChild(iframe);
+            }
         </script>
     </body>
 </html>
