@@ -256,42 +256,22 @@
 
         <script>
 
-            /*function loadIframe() {
-             iframe = document.getElementById('printIframe');
-             iframe.src = '<%- printUrl %>';
-             }
-             window.setTimeout("loadIframe();", 350);*/
-
             window.onload = function () {
                 setAttributes();
 
-                //iframe = document.getElementById('printIframe');
-                //iframe.src = '<%- printUrl %>';
-
                 multiplePrintUrls = multiplePrintUrls.split(',');
-                timer = 5000;
 
                 for (var i = 0; i <= multiplePrintUrls.length - 1; i++) {
-                   
+
                     src = multiplePrintUrls[i];
-                    setTimeout(function () {
-                         timer += 5000;
-                        createiFrame(src, timer)
-                    }, timer);
+                    setTimeout("createiFrame('" + src + "')", 2000 * (i + 1));
 
                 }
 
-            } //Run this when the window has loaded successfully
+            }
 
-            /*
-             * ar iframe = document.getElementById('myIframe'),src = iframe.src;
-             iframe.src = '';
-             document.onload =  function(){iframe.src = src;}
-             setTimeout(function(){ alert("Hello"); }, 3000);  //after 3 seconds
-             */
-
-            function createiFrame(src, timer) {
-                console.log(timer)
+            function createiFrame(src) {
+                console.log(new Date().getSeconds());
                 body = jQuery('body')[0];
                 iframe = document.createElement('iframe');
                 iframe.src = src;
