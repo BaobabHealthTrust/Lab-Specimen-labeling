@@ -325,8 +325,19 @@ router.get('/download_order/:identifier?', loadUser, function (req, res, next) {
     person = req.session.person;
     personNames = person["person"]["names"];
     gender = person["person"]["gender"];
+    birthDay = person["person"]["birth_day"];
+    birthMonth = person["person"]["birth_month"];
+    birthYear = person["person"]["birth_year"];
+    if (birthDay === 'Unknown')
+        birthDay = 1;
+    if (birthMonth === 'Unknown')
+        birthMonth = 7;
 
-    name = personNames["given_name"] + ' ' + personNames["family_name"] + ' (' + patientIdentifier + ')(' + gender + ')';
+    birthdate = new Date(parseInt(birthYear), parseInt(birthMonth) - 1, parseInt(birthDay));
+    age = getAge(birthdate);
+
+    name = personNames["given_name"] + ' ' + personNames["family_name"] + "(" + age + ")"
+        ' (' + patientIdentifier + ')(' + gender + ')';
     knex('LabTestTable').where({Pat_ID: patientIdentifier, AccessionNum: accessionNum, TestOrdered: testName}).select(
             'AccessionNum', 'TestOrdered', 'OrderDate', 'OrderTime', 'OrderedBy'
             ).then(function (testOrdered) {
