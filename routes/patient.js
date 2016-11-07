@@ -356,7 +356,7 @@ router.get('/download_order/:identifier?', loadUser, function (req, res, next) {
                 "ZT\n" +
                 "B70,95,0,1,4,8,50,N,\"" + accessionNum + "\"\n" +
                 "A70,10,0,2,1,1,N,\"" + name + "\"\n" +
-                "A70,30,0,2,1,1,N,\"Acc no  " + accessionNum + "\"\n" +
+                "A70,30,0,2,1,1,N,\"Acc no  " + accessionNum + " Site Code " + facilityName + "\"\n" +
                 "A70,50,0,2,1,1,N,\"Order " + testName + "\"\n" +
                 "A70,70,0,2,1,1,N,\"" + dateTimeOrdered + "\"\n" +
                 "P3\n\n"
