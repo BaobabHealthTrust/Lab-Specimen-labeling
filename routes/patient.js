@@ -48,7 +48,7 @@ router.get('/show/:identifier?', loadUser, function (req, res, next) {
     birthdate = new Date(parseInt(birthYear), parseInt(birthMonth) - 1, parseInt(birthDay));
     age = getAge(birthdate);
 
-    knex('LabTestTable').where({Pat_ID: patientIdentifiers['National id']}).select(
+    knex('LabTestTable').where({Pat_ID: patientIdentifiers['National id']}).orderBy('AccessionNum', 'DESC').select(
             'AccessionNum', 'TestOrdered', 'OrderDate', 'OrderTime', 'OrderedBy'
             ).then(function (testsOrdered) {
         array = []
