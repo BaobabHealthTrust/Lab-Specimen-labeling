@@ -354,11 +354,11 @@ router.get('/download_order/:identifier?', loadUser, function (req, res, next) {
                 "q500\n" +
                 "Q165,026\n" +
                 "ZT\n" +
-                "B50,110,0,1,4,4,30,N,\"" + accessionNum + "\"\n" +
-                "A35,50,0,2,1,1,N,\"" + name + "\"\n" +
-                "A35,70,0,2,1,1,N,\"Acc no  " + accessionNum + "\"\n" +
-                "A35,90,0,2,1,1,N,\"Order " + testName + "\"\n" +
-                "A35,110,0,2,1,1,N,\"" + dateTimeOrdered + "\"\n" +
+                "B50,119,0,1,4,8,50,N,\"" + accessionNum + "\"\n" +
+                "A35,30,0,2,1,1,N,\"" + name + "\"\n" +
+                "A35,50,0,2,1,1,N,\"Acc no  " + accessionNum + "\"\n" +
+                "A35,70,0,2,1,1,N,\"Order " + testName + "\"\n" +
+                "A35,90,0,2,1,1,N,\"" + dateTimeOrdered + "\"\n" +
                 "P3\n\n"
 
         fs.writeFile(fileName, data, function (err) {
