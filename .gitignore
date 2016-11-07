@@ -2,6 +2,7 @@
 *.swo
 *~
 nbproject
+bart_config.js
 db/bookshelf.js
 public/touchscreentoolkit/*
 *.log
