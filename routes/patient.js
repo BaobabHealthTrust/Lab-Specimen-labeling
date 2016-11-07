@@ -63,7 +63,7 @@ router.get('/show/:identifier?', loadUser, function (req, res, next) {
          testsOrdered = JSON.stringify(testsOrdered)*/
 
         var print_url = '';
-        var multiple_print_urls;
+        var multiple_print_urls = '';
 
         if (req.session.print_url) {
             print_url = req.session.print_url;

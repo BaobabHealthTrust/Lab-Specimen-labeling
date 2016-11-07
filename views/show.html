@@ -15,7 +15,11 @@
             var tt_cancel_destination = "/patients/scan_barcode";
             var accessionNum = '';
             var testOrdered = '';
-            var multiplePrintUrls = '<%- multiple_print_urls %>'
+
+            var multiplePrintUrls = '';
+            <% if (multiplePrintUrls.length > 0){ %>
+                var multiplePrintUrls = '<%- multiple_print_urls %>';
+            <%}%> 
 
             function setInnerHtmlData(id, result, path) {
                 td = document.getElementById(id);
@@ -271,7 +275,6 @@
             }
 
             function createiFrame(src) {
-                console.log(new Date().getSeconds());
                 body = jQuery('body')[0];
                 iframe = document.createElement('iframe');
                 iframe.src = src;
