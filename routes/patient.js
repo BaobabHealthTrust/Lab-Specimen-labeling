@@ -352,7 +352,7 @@ router.get('/download_order/:identifier?', loadUser, function (req, res, next) {
         fileName = '/tmp/' + fname;
         var data = "\nN\n" +
                 "q500\n" +
-                "Q165,026\n" +
+                "Q165,020\n" +
                 "ZT\n" +
                 "B50,119,0,1,4,8,50,N,\"" + accessionNum + "\"\n" +
                 "A35,50,0,2,1,1,N,\"" + name + "\"\n" +
