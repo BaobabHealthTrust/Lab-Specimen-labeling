@@ -336,7 +336,7 @@ router.get('/download_order/:identifier?', loadUser, function (req, res, next) {
     birthdate = new Date(parseInt(birthYear), parseInt(birthMonth) - 1, parseInt(birthDay));
     age = getAge(birthdate);
 
-    name = personNames["given_name"] + " (" + gender +  ") " + personNames["family_name"] + "(" + age + ")"
+    name = personNames["given_name"] + " " + personNames["family_name"] +  " (" + gender +  ") " + "(" + age + ")"
         ' (' + patientIdentifier + ')(' + gender + ')';
     knex('LabTestTable').where({Pat_ID: patientIdentifier, AccessionNum: accessionNum, TestOrdered: testName}).select(
             'AccessionNum', 'TestOrdered', 'OrderDate', 'OrderTime', 'OrderedBy'
