@@ -43,6 +43,7 @@ app.use('/patients/manage_orders/:identifier?', patients);
 app.use('/patients/delete_orders', patients);
 app.use('/patients/print_orders/:identifier?', patients);
 app.use('/patients/download_order/:identifier?', patients);
+app.use('/patients/download_order_modified/:identifier?', patients);
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
     var err = new Error('Not Found');

@@ -20,7 +20,10 @@
             <% if (multiplePrintUrls.length > 0){ %>
                 var multiplePrintUrls = '<%- multiple_print_urls %>';
             <%}%> 
-
+            
+            var accessionNumber = '<%- accesion_number %>';
+            var nationalID = '<%- patientIdentifiers["National id"] %>';
+            
             function setInnerHtmlData(id, result, path) {
                 td = document.getElementById(id);
                 td.innerHTML = "<a href =" + path + ">" + result + "</a>"
@@ -262,16 +265,8 @@
 
             window.onload = function () {
                 setAttributes();
-
-                multiplePrintUrls = multiplePrintUrls.split(',');
-
-                for (var i = 0; i <= multiplePrintUrls.length - 1; i++) {
-
-                    src = multiplePrintUrls[i];
-                    setTimeout("createiFrame('" + src + "')", 2000 * (i + 1));
-
-                }
-
+                src = "/patients/download_order_modified?identifier=" + nationalID + "&accessionNum=" + accessionNumber;
+                setTimeout("createiFrame('" + src + "')", 2000);
             }
 
             function createiFrame(src) {

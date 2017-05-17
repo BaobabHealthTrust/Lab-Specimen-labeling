@@ -64,6 +64,7 @@ router.get('/show/:identifier?', loadUser, function (req, res, next) {
 
         var print_url = '';
         var multiple_print_urls = '';
+        var accesion_number = '';
 
         if (req.session.print_url) {
             print_url = req.session.print_url;
@@ -74,12 +75,82 @@ router.get('/show/:identifier?', loadUser, function (req, res, next) {
             multiple_print_urls = req.session.multiple_print_urls;
             req.session.multiple_print_urls = null;
         }
-
+        //request.session.accession_number
+        if (req.session.accession_number) {
+            accesion_number = req.session.accession_number;
+            req.session.accesion_number = null;
+        }
         res.render('show', {title: 'Patients Home Page', personAddress: personAddress,
             personAttributes: personAttributes, personNames: personNames,
             patientIdentifiers: patientIdentifiers, gender: gender, birthDay: birthDay,
             birthMonth: birthMonth, birthYear: birthYear, age: age, testsOrdered: testsOrdered,
-            printUrl: print_url, multiplePrintUrls: multiple_print_urls
+            printUrl: print_url, multiplePrintUrls: multiple_print_urls, accesion_number: accesion_number
+        });
+
+    });
+
+});
+
+router.get('/show/:identifier?', loadUser, function (req, res, next) {
+
+    var person = req.session.person;
+    if (isEmpty(person) === true) {
+        req.session.patient_not_found = 'true'
+        res.redirect("/patients/scan_barcode");
+    }
+
+    personAddress = person["person"]["addresses"];
+    personAttributes = person["person"]["attributes"];
+    personNames = person["person"]["names"];
+    patientIdentifiers = person["person"]["patient"]["identifiers"];
+    gender = person["person"]["gender"];
+    birthDay = person["person"]["birth_day"];
+    birthMonth = person["person"]["birth_month"];
+    birthYear = person["person"]["birth_year"];
+    if (birthDay === 'Unknown')
+        birthDay = 1;
+    if (birthMonth === 'Unknown')
+        birthMonth = 7;
+    birthdate = new Date(parseInt(birthYear), parseInt(birthMonth) - 1, parseInt(birthDay));
+    age = getAge(birthdate);
+
+    knex('LabTestTable').where({Pat_ID: patientIdentifiers['National id']}).orderBy('AccessionNum', 'DESC').select(
+            'AccessionNum', 'TestOrdered', 'OrderDate', 'OrderTime', 'OrderedBy'
+            ).then(function (testsOrdered) {
+        array = []
+
+        /*for (var test in testsOrdered) {
+         array.push([testsOrdered[test].AccessionNum, testsOrdered[test].TestOrdered, testsOrdered[test].OrderDate,
+         testsOrdered[test].OrderTime, testsOrdered[test].OrderedBy]
+         );
+         }
+         
+         testsOrdered = arrayGroup(array, 4);
+         testsOrdered = JSON.stringify(testsOrdered)*/
+
+        var print_url = '';
+        var multiple_print_urls = '';
+        var accesion_number = '';
+
+        if (req.session.print_url) {
+            print_url = req.session.print_url;
+            req.session.print_url = null;
+        }
+        //multiple_print_urls
+        if (req.session.multiple_print_urls) {
+            multiple_print_urls = req.session.multiple_print_urls;
+            req.session.multiple_print_urls = null;
+        }
+        //request.session.accession_number
+        if (req.session.accession_number) {
+            accesion_number = req.session.accession_number;
+            req.session.accesion_number = null;
+        }
+        res.render('show', {title: 'Patients Home Page', personAddress: personAddress,
+            personAttributes: personAttributes, personNames: personNames,
+            patientIdentifiers: patientIdentifiers, gender: gender, birthDay: birthDay,
+            birthMonth: birthMonth, birthYear: birthYear, age: age, testsOrdered: testsOrdered,
+            printUrl: print_url, multiplePrintUrls: multiple_print_urls, accesion_number: accesion_number
         });
 
     });
@@ -216,9 +287,10 @@ router.post('/process_lab_results', loadUser, function (request, response) {
         data = [];
         accession_test = {}
         multiple_print_urls = [];
+        AccessionNum = AccessionNum + 1;
         for (var i = 0; i <= selected_tests.length - 1; i++) {
             if (selected_tests[i].length > 0) {
-                AccessionNum = AccessionNum + 1;
+                //AccessionNum = AccessionNum + 1;
                 short_name = tests["short_names"][selected_tests[i]];
                 if (!short_name) {
                     short_name = selected_tests[i];
@@ -242,9 +314,9 @@ router.post('/process_lab_results', loadUser, function (request, response) {
         knex.insert(data).into("LabTestTable").returning('AccessionNum').then(function (acc_num) {
             acc_num = Object.keys(accession_test)[Object.keys(accession_test).length - 1];
             testShortName = accession_test[acc_num] //Last Test
-
             url = "/patients/download_order?identifier=" + patientIdentifier + '&accessionNum=' + acc_num + '&testOrdered=' + encodeURIComponent(testShortName);
             request.session.print_url = url;
+            request.session.accession_number = AccessionNum;
             request.session.multiple_print_urls = multiple_print_urls;
             response.redirect("/patients/show/" + patientIdentifier);
         })
@@ -336,8 +408,8 @@ router.get('/download_order/:identifier?', loadUser, function (req, res, next) {
     birthdate = new Date(parseInt(birthYear), parseInt(birthMonth) - 1, parseInt(birthDay));
     age = getAge(birthdate);
 
-    name = personNames["given_name"] + " " + personNames["family_name"] +  " (" + gender +  ") " + "(" + age + ")(" + patientIdentifier + ")"
-        ' (' + patientIdentifier + ')(' + gender + ')';
+    name = personNames["given_name"] + " " + personNames["family_name"] + " (" + gender + ") " + "(" + age + ")(" + patientIdentifier + ")"
+    ' (' + patientIdentifier + ')(' + gender + ')';
     knex('LabTestTable').where({Pat_ID: patientIdentifier, AccessionNum: accessionNum, TestOrdered: testName}).select(
             'AccessionNum', 'TestOrdered', 'OrderDate', 'OrderTime', 'OrderedBy'
             ).then(function (testOrdered) {
@@ -383,6 +455,81 @@ router.get('/download_order/:identifier?', loadUser, function (req, res, next) {
         });
     });
 });
+
+router.get('/download_order_modified/:identifier?', loadUser, function (req, res, next) {
+    patientIdentifier = req.query.identifier;
+    testName = req.query.testOrdered;
+    accessionNum = req.query.accessionNum;
+    person = req.session.person;
+    personNames = person["person"]["names"];
+    gender = person["person"]["gender"];
+    birthDay = person["person"]["birth_day"];
+    birthMonth = person["person"]["birth_month"];
+    birthYear = person["person"]["birth_year"];
+    if (birthDay === 'Unknown')
+        birthDay = 1;
+    if (birthMonth === 'Unknown')
+        birthMonth = 7;
+
+    birthdate = new Date(parseInt(birthYear), parseInt(birthMonth) - 1, parseInt(birthDay));
+    age = getAge(birthdate);
+
+    /*name = personNames["given_name"] + " " + personNames["family_name"] + " (" + gender + ") " + "(" + age + ")(" + patientIdentifier + ")"
+    ' (' + patientIdentifier + ')(' + gender + ')';*/
+    
+    name = personNames["given_name"] + " " + personNames["family_name"] + " (" + gender + ")(" + patientIdentifier + ")"
+    ' (' + patientIdentifier + ')(' + gender + ')';
+    
+    knex('LabTestTable').where({Pat_ID: patientIdentifier, AccessionNum: accessionNum}).select(
+            'AccessionNum', 'TestOrdered', 'OrderDate', 'OrderTime', 'OrderedBy'
+            ).then(function (testOrdered) {
+        testNames = [];
+        for (var i = 0; i <= testOrdered.length - 1; i++) {
+            testNames.push(testOrdered[i]["TestOrdered"]);
+        }
+        testNames = testNames.join(', ');
+        orderDate = testOrdered[0].OrderDate;
+        orderTime = testOrdered[0].OrderTime;
+        months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+        date = new Date(orderDate)
+        month = months[date.getMonth()];
+        dateTimeOrdered = date.getDate() + '/' + month + '/' + date.getFullYear() + ' ' + orderTime;
+        fname = new Date().getTime() + '.lbl'
+        fileName = '/tmp/' + fname;
+        var data = "\nN\n" +
+                "q500\n" +
+                "Q165,026\n" +
+                "ZT\n" +
+                "B70,95,0,1,4,8,50,N,\"" + accessionNum + "\"\n" +
+                "A70,10,0,2,1,1,N,\"" + name + "\"\n" +
+                "A70,30,0,2,1,1,N,\"Acc:  " + accessionNum + "; Site:" + facilityName + "\"\n" +
+                "A70,50,0,2,1,1,N,\"Order: " + testNames + "\"\n" +
+                "A70,70,0,2,1,1,N,\"" + dateTimeOrdered + "\"\n" +
+                "P2\n"
+
+        fs.writeFile(fileName, data, function (err) {
+            var path = require('path');
+            var mime = require('mime');
+            //res.download(fileName);
+            var file = fileName;
+
+            var filename = path.basename(file);
+            var mimetype = mime.lookup(file);
+            res.setHeader('Content-disposition', 'inline; filename=' + fname);
+            res.setHeader('Content-type', 'application/label; charset=utf-8');
+            res.setHeader('stream', false);
+
+            var filestream = fs.createReadStream(file);
+            filestream.on('open', function () {
+                // This just pipes the read stream to the response object (which goes to the client)
+                filestream.pipe(res);
+            });
+
+            //filestream.pipe(res);
+        });
+    });
+});
+
 
 function isEmpty(obj) {
     try {
