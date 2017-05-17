@@ -477,7 +477,7 @@ router.get('/download_order_modified/:identifier?', loadUser, function (req, res
     /*name = personNames["given_name"] + " " + personNames["family_name"] + " (" + gender + ") " + "(" + age + ")(" + patientIdentifier + ")"
     ' (' + patientIdentifier + ')(' + gender + ')';*/
     
-    name = personNames["given_name"] + " " + personNames["family_name"] + " (" + gender + ")(" + patientIdentifier + ")"
+    name = personNames["given_name"] + " " + personNames["family_name"] + " (" + gender + ")"
     ' (' + patientIdentifier + ')(' + gender + ')';
     
     knex('LabTestTable').where({Pat_ID: patientIdentifier, AccessionNum: accessionNum}).select(
@@ -504,8 +504,8 @@ router.get('/download_order_modified/:identifier?', loadUser, function (req, res
                 "A70,10,0,2,1,1,N,\"" + name + "\"\n" +
                 "A70,30,0,2,1,1,N,\"Acc:  " + accessionNum + "; Site:" + facilityName + "\"\n" +
                 "A70,50,0,2,1,1,N,\"Order: " + testNames + "\"\n" +
-                "A70,70,0,2,1,1,N,\"" + dateTimeOrdered + "\"\n" +
-                "P2\n"
+                "A70,70,0,2,1,1,N,\"" + dateTimeOrdered + " (" + patientIdentifier + ")\"\n" +
+                "P3\n"
 
         fs.writeFile(fileName, data, function (err) {
             var path = require('path');
