@@ -408,8 +408,11 @@ router.get('/download_order/:identifier?', loadUser, function (req, res, next) {
     birthdate = new Date(parseInt(birthYear), parseInt(birthMonth) - 1, parseInt(birthDay));
     age = getAge(birthdate);
 
-    name = personNames["given_name"] + " " + personNames["family_name"] + " (" + gender + ") " + "(" + age + ")(" + patientIdentifier + ")"
+    /*name = personNames["given_name"] + " " + personNames["family_name"] + " (" + gender + ") " + "(" + age + ")(" + patientIdentifier + ")"
+    ' (' + patientIdentifier + ')(' + gender + ')';*/
+    name = personNames["given_name"] + " " + personNames["family_name"] + " (" + gender + ")"
     ' (' + patientIdentifier + ')(' + gender + ')';
+    
     knex('LabTestTable').where({Pat_ID: patientIdentifier, AccessionNum: accessionNum, TestOrdered: testName}).select(
             'AccessionNum', 'TestOrdered', 'OrderDate', 'OrderTime', 'OrderedBy'
             ).then(function (testOrdered) {
@@ -428,10 +431,10 @@ router.get('/download_order/:identifier?', loadUser, function (req, res, next) {
                 "ZT\n" +
                 "B70,95,0,1,4,8,50,N,\"" + accessionNum + "\"\n" +
                 "A70,10,0,2,1,1,N,\"" + name + "\"\n" +
-                "A70,30,0,2,1,1,N,\"Acc no  " + accessionNum + "; Site Code :" + facilityName + "\"\n" +
-                "A70,50,0,2,1,1,N,\"Order " + testName + "\"\n" +
-                "A70,70,0,2,1,1,N,\"" + dateTimeOrdered + "\"\n" +
-                "P3\n\n"
+                "A70,30,0,2,1,1,N,\"Acc:  " + accessionNum + "; Site:" + facilityName + "\"\n" +
+                "A70,50,0,2,1,1,N,\"Order: " + testName + "\"\n" +
+                "A70,70,0,2,1,1,N,\"" + dateTimeOrdered + " (" + patientIdentifier + ")\"\n" +
+                "P3\n"
 
         fs.writeFile(fileName, data, function (err) {
             var path = require('path');
